@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Real Estate Manager</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+
+    <string name="your_lunch">Your Profile</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Log out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
