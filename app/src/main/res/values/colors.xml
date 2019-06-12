@@ -2,5 +2,9 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3F51B5</color>
+
+    <!--colors for modern ui 00a5ff-->
+    <color name="whiteTextColor">#fff</color>
+    <color name="primaryTextColor">#3F51B5</color>
 </resources>

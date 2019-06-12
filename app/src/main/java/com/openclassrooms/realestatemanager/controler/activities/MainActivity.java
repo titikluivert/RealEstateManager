@@ -73,7 +73,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new HomeFragment()).commit();
 
-
         mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
