@@ -5,13 +5,13 @@
 
     >
 
-    <item
+<!--    <item
         android:id="@+id/menu_main_add"
         android:title="add"
         android:icon="@drawable/ic_add_black_24dp"
         app:showAsAction="ifRoom|collapseActionView">
 
-    </item>
+    </item>-->
 
 
     <item

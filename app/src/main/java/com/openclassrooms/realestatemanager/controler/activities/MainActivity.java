@@ -45,7 +45,7 @@ import butterknife.ButterKnife;
 
 import static com.openclassrooms.realestatemanager.utils.mainUtils.REAL_ESTATE;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.HomefragmentCallback{
 
     // FOR DESIGN
 
@@ -58,14 +58,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     // define an ActionBarDrawerToggle
     private ActionBarDrawerToggle mToggle;
 
+    private Menu menu;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
        // this.recyclerView = findViewById(R.id.main_recycler_view);
-//        this.recyclerView.setHasFixedSize(true);
- //       this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+       // this.recyclerView.setHasFixedSize(true);
+       // this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -83,6 +85,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //2 - Inflate the menu and add it to the Toolbar
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
     }
@@ -90,12 +93,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //3 - Handle actions on menu items
-
         switch (item.getItemId()) {
 
-            case R.id.menu_main_add:
+            /*case R.id.menu_main_add:
                 this.openAddFragment(new AddNewEstateFragment());
-                return true;
+                return true;*/
             case R.id.menu_main_search:
                 // launchNotificationActivity();
                 return true;
@@ -108,6 +110,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        //menu.add(0, R.id.menu_main_search, 0, "test");
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -136,5 +144,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
+    @Override
+    public void newRealEstateAdd() {
+        menu.removeItem(R.id.menu_main_search);
+    }
 }
 

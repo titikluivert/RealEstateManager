@@ -1,5 +1,9 @@
 package com.openclassrooms.realestatemanager.model;
 
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.util.Date;
+
 public class RealEstateModel {
 
 
@@ -11,12 +15,12 @@ public class RealEstateModel {
     private String[] photos;
     private String address;
     private boolean status;
-    private String dateOfEntrance;
+    private Date dateOfEntrance;
     private String dateOfSale;
     private RealEstateAgent realEstateAgent;
 
 
-    public RealEstateModel(String type, String price, float surface, int roomNumbers, String description, String[] photos, String address, boolean status, String dateOfEntrance, String dateOfSale, RealEstateAgent realEstateAgent) {
+    public RealEstateModel(String type, String price, float surface, int roomNumbers, String description, String[] photos, String address, boolean status, String dateOfSale, RealEstateAgent realEstateAgent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -25,12 +29,9 @@ public class RealEstateModel {
         this.photos = photos;
         this.address = address;
         this.status = status;
-        this.dateOfEntrance = dateOfEntrance;
         this.dateOfSale = dateOfSale;
         this.realEstateAgent = realEstateAgent;
     }
-
-
 
 
     public RealEstateModel(String type, String price, String surface, String numOfRooms, String description, String s, boolean b, String dateOfEntrance, String s1, Object o) {
@@ -102,13 +103,13 @@ public class RealEstateModel {
         this.status = status;
     }
 
-    public String getDateOfEntrance() {
-        return dateOfEntrance;
-    }
 
-    public void setDateOfEntrance(String dateOfEntrance) {
-        this.dateOfEntrance = dateOfEntrance;
-    }
+    @ServerTimestamp
+    public Date getDateOfEntrance() { return dateOfEntrance; }
+
+
+
+    public void setDateOfEntrance(Date dateOfEntrance) { this.dateOfEntrance = dateOfEntrance; }
 
     public String getDateOfSale() {
         return dateOfSale;

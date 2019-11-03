@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Real Estate Manager</string>
 
     <string name="open">Open</string>
@@ -13,11 +14,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="message">Message</string>
-    <string name="send">Send</string>
-    <string name="email">Email</string>
-    <string name="name">Name</string>
-    <string name="mobno">Mobile No.</string>
-    <string name="reg_no">Reg</string>
+    <string name="description">Description</string>
+    <string name="send">Next</string>
+    <string name="price">Price</string>
+    <string name="type">Type</string>
+    <string name="address">Address</string>
+    <string name="surface">Surface</string>
+    <string name="numberOfRooms">Number of rooms</string>
 
 </resources>

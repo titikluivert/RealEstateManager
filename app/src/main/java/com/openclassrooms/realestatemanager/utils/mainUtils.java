@@ -69,4 +69,12 @@ public class mainUtils {
         WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
     }
+
+
+
+    // ---
+    private String convertDateToHour(Date date){
+        DateFormat dfTime = new SimpleDateFormat("HH:mm");
+        return dfTime.format(date);
+    }
 }

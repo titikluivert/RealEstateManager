@@ -40,9 +40,22 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/txtName"
+                    android:id="@+id/realEstateType"
                     style="@style/modifiedEditText"
-                    android:hint="@string/name"
+                    android:hint="@string/type"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtInputAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/realEstateAddress"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/address"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -53,11 +66,11 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/txtEmail"
+                    android:id="@+id/realEstatePrice"
                     style="@style/modifiedEditText"
                     android:ems="10"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
+                    android:hint="@string/price"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,10 +80,10 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/txtMob"
+                    android:id="@+id/realEstateSurface"
                     style="@style/modifiedEditText"
-                    android:hint="@string/mobno"
-                    android:inputType="phone" />
+                    android:hint="@string/surface"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -79,9 +92,9 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/txtReg"
+                    android:id="@+id/realEstateNumOfRooms"
                     style="@style/modifiedEditText"
-                    android:hint="@string/reg_no" />
+                    android:hint="@string/numberOfRooms" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,9 +105,9 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/txtFeed"
+                    android:id="@+id/realEstateDescription"
                     style="@style/modifiedEditText"
-                    android:hint="@string/message"
+                    android:hint="@string/description"
                     android:inputType="textMultiLine"
                     android:minLines="2" />
 
@@ -104,7 +117,7 @@
                 android:id="@+id/btnSend"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/centre_button"
                 android:text="@string/send"

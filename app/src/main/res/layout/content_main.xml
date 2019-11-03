@@ -33,7 +33,7 @@
                 <EditText
                     android:id="@+id/txtName"
                     style="@style/modifiedEditText"
-                    android:hint="@string/name"
+                    android:hint="@string/type"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -48,7 +48,7 @@
                     android:id="@+id/txtEmail"
                     style="@style/modifiedEditText"
                     android:ems="10"
-                    android:hint="@string/email"
+                    android:hint="@string/price"
                     android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -62,7 +62,7 @@
                 <EditText
                     android:id="@+id/txtMob"
                     style="@style/modifiedEditText"
-                    android:hint="@string/mobno"
+                    android:hint="@string/surface"
                     android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +75,7 @@
                 <EditText
                     android:id="@+id/txtReg"
                     style="@style/modifiedEditText"
-                    android:hint="@string/reg_no" />
+                    android:hint="@string/numberOfRooms" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,7 +88,7 @@
                 <EditText
                     android:id="@+id/txtFeed"
                     style="@style/modifiedEditText"
-                    android:hint="@string/message"
+                    android:hint="@string/description"
                     android:inputType="textMultiLine"
                     android:minLines="2" />
 
