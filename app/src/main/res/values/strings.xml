@@ -22,4 +22,14 @@
     <string name="surface">Surface</string>
     <string name="numberOfRooms">Number of rooms</string>
 
+
+    <!-- Share preferences -->
+
+    <string name="typePref">RealEstateType</string>
+    <string name="pricePref">RealEstatePrice</string>
+    <string name="addressPref">RealEstateAddress</string>
+    <string name="surfacePref">RealEstateSurface</string>
+    <string name="numbeOfRoomsPref">RealEstateNumOfRooms</string>
+    <string name="descriptionPref">RealEstateTypeDescription</string>
+
 </resources>

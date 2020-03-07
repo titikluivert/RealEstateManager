@@ -21,26 +21,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.openclassrooms.realestatemanager.utils.mainUtils.saveParamEstateInfo;
 
-public class AddNewEstateFragment extends Fragment {
+
+public class EstateFragment_2 extends BaseFragment {
 
 
-    @BindView(R.id.realEstateType)
-    EditText realEstateType;
 
-    @BindView(R.id.realEstatePrice)
-    EditText realEstatePrice;
-
-    @BindView(R.id.realEstateSurface)
-    EditText realEstateSurface;
-
-    @BindView(R.id.realEstateNumOfRooms)
-    EditText realEstateNumOfRooms;
-
-    @BindView(R.id.realEstateDescription)
-    EditText realEstateDescription;
-
-    public AddNewEstateFragment() {
+    public EstateFragment_2() {
         // Required empty public constructor
     }
 
@@ -49,29 +37,30 @@ public class AddNewEstateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_new_realestate, container, false);
+        View view = inflater.inflate(R.layout.estate_fragment_layout_2, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
-    @OnClick(R.id.btnSend)
-    public void nextAdd() {
+    /**
 
-        RealEstateModel userInfo = new RealEstateModel(realEstateType.getText().toString(),
+    @OnClick (R.id.addNewRealEstate_fab)
+    public void addNewRealEstate(){
+        if(callback!= null)
+            callback.newRealEstateAdd();
 
-                realEstatePrice.getText().toString(),
-                Float.parseFloat(realEstateSurface.getText().toString()),
-                Integer.parseInt(realEstateNumOfRooms.getText().toString()),
-                realEstateDescription.getText().toString(),
-                null,
-                null,
+        replaceFragment(new EstateFragment_2());
+    }
+
+        RealEstateModel userInfo = new RealEstateModel(
                 true,
                 null,
                 null);
+
+
         writeNewRealEstate(realEstateType.getText().toString(), userInfo);
+ */
 
-
-    }
 
 
     private void writeNewRealEstate(String realEstateType, RealEstateModel user) {
@@ -133,12 +122,5 @@ public class AddNewEstateFragment extends Fragment {
                         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
                         String dateOfEntrance = df.format(Calendar.getInstance().getTime());*/
 
-    private void replaceFragment(Fragment someFragment) {
 
-        assert getFragmentManager() != null;
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, someFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 }

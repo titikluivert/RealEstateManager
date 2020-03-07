@@ -1,7 +1,12 @@
 package com.openclassrooms.realestatemanager.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
+
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,5 +81,37 @@ public class mainUtils {
     private String convertDateToHour(Date date){
         DateFormat dfTime = new SimpleDateFormat("HH:mm");
         return dfTime.format(date);
+    }
+
+
+
+    public static  void saveParamEstateInfo (Context context, String realEstateType, String realEstatePrice, String realEstateSurface, String realEstateNumOfRooms, String realEstateDescription, String realEstateAddress)
+    {
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.typePref), realEstateType);
+        editor.putString(context.getString(R.string.pricePref), realEstatePrice);
+        editor.putString(context.getString(R.string.surfacePref), realEstateSurface);
+        editor.putString(context.getString(R.string.numbeOfRoomsPref), realEstateNumOfRooms);
+        editor.putString(context.getString(R.string.descriptionPref), realEstateDescription);
+        editor.putString(context.getString(R.string.addressPref), realEstateAddress);
+        editor.apply();
+    }
+
+
+    public static RealEstateModelPref getParamEstateInfo(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return new RealEstateModelPref(sharedPreferences.getString(context.getString(R.string.typePref), ""),
+                sharedPreferences.getString(context.getString(R.string.pricePref), ""),
+                sharedPreferences.getString(context.getString(R.string.surfacePref), ""),
+                sharedPreferences.getString(context.getString(R.string.numbeOfRoomsPref), ""),
+                sharedPreferences.getString(context.getString(R.string.descriptionPref), ""),
+                sharedPreferences.getString(context.getString(R.string.addressPref), "")
+
+        );
+
     }
 }
