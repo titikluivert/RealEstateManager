@@ -1,9 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import com.google.firebase.firestore.ServerTimestamp;
-
-import java.util.Date;
-
 public class RealEstateModelPref {
 
 
@@ -15,7 +11,7 @@ public class RealEstateModelPref {
     private String address;
 
 
-    public RealEstateModelPref(String type, String price, String surface, String roomNumbers, String description,  String address) {
+    public RealEstateModelPref(String type, String price, String surface, String roomNumbers, String description, String address) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -73,7 +69,6 @@ public class RealEstateModelPref {
     }
 
 
-
     public String getAddress() {
         return address;
     }
@@ -81,7 +76,6 @@ public class RealEstateModelPref {
     public void setAddress(String address) {
         this.address = address;
     }
-
 
 
 }

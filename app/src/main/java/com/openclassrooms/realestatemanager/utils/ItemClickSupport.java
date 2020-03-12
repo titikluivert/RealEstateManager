@@ -1,7 +1,8 @@
 package com.openclassrooms.realestatemanager.utils;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by NG-TIOFACK on 10/21/2018.

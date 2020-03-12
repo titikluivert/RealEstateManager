@@ -1,15 +1,15 @@
 package com.openclassrooms.realestatemanager.controler.activities;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
@@ -20,7 +20,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.HomefragmentCallback{
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.HomefragmentCallback {
 
     // FOR DESIGN
 
@@ -40,9 +40,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-       // this.recyclerView = findViewById(R.id.main_recycler_view);
-       // this.recyclerView.setHasFixedSize(true);
-       // this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // this.recyclerView = findViewById(R.id.main_recycler_view);
+        // this.recyclerView.setHasFixedSize(true);
+        // this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-    public void openAddFragment(Fragment mFragment){
+    public void openAddFragment(Fragment mFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container, mFragment).commit();
     }

@@ -5,25 +5,23 @@
 
     >
 
-<!--    <item
-        android:id="@+id/menu_main_add"
-        android:title="add"
-        android:icon="@drawable/ic_add_black_24dp"
-        app:showAsAction="ifRoom|collapseActionView">
+    <!--    <item
+            android:id="@+id/menu_main_add"
+            android:title="add"
+            android:icon="@drawable/ic_add_black_24dp"
+            app:showAsAction="ifRoom|collapseActionView">
 
-    </item>-->
+        </item>-->
 
 
     <item
         android:id="@+id/menu_main_search"
-        android:title="search"
         android:icon="@drawable/ic_search_black_24dp"
+        android:title="search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView">
 
     </item>
-
-
 
 
 </menu>

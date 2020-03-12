@@ -9,32 +9,36 @@ public class RealEstateModel {
 
     private String type;
     private String price;
-    private float surface;
-    private int roomNumbers;
+    private String surface;
+    private String roomNumbers;
     private String description;
-    private String[] photos;
     private String address;
-    private boolean status;
-    private Date dateOfEntrance;
-    private String dateOfSale;
-    private RealEstateAgent realEstateAgent;
+   // private String status;
+    //private Date dateOfEntrance;
+   // private Date dateOfSale;
 
 
-    public RealEstateModel(String type, String price, float surface, int roomNumbers, String description, String[] photos, String address, boolean status, String dateOfSale, RealEstateAgent realEstateAgent) {
+  /**  public RealEstateModel(String type, String price, String surface, String roomNumbers, String description, String address, String status) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.roomNumbers = roomNumbers;
         this.description = description;
-        this.photos = photos;
         this.address = address;
         this.status = status;
-        this.dateOfSale = dateOfSale;
-        this.realEstateAgent = realEstateAgent;
+    }*/
+
+    public RealEstateModel(String type, String price, String surface, String roomNumbers, String description, String address) {
+        this.type = type;
+        this.price = price;
+        this.surface = surface;
+        this.roomNumbers = roomNumbers;
+        this.description = description;
+        this.address = address;
     }
 
 
-    public RealEstateModel(String type, String price, String surface, String numOfRooms, String description, String s, boolean b, String dateOfEntrance, String s1, Object o) {
+    public RealEstateModel(String type, String price, String surface, String numOfRooms, String description, String s, String b, String dateOfEntrance, String s1, String  o) {
 
     }
 
@@ -55,19 +59,19 @@ public class RealEstateModel {
         this.price = price;
     }
 
-    public float getSurface() {
+    public String getSurface() {
         return surface;
     }
 
-    public void setSurface(float surface) {
+    public void setSurface(String surface) {
         this.surface = surface;
     }
 
-    public int getRoomNumbers() {
+    public String getRoomNumbers() {
         return roomNumbers;
     }
 
-    public void setRoomNumbers(int roomNumbers) {
+    public void setRoomNumbers(String roomNumbers) {
         this.roomNumbers = roomNumbers;
     }
 
@@ -79,14 +83,6 @@ public class RealEstateModel {
         this.description = description;
     }
 
-    public String[] getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(String[] photos) {
-        this.photos = photos;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -95,35 +91,32 @@ public class RealEstateModel {
         this.address = address;
     }
 
-    public boolean isStatus() {
+/**
+ public String isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
 
     @ServerTimestamp
-    public Date getDateOfEntrance() { return dateOfEntrance; }
+    public Date getDateOfEntrance() {
+        return dateOfEntrance;
+    }
 
 
+    public void setDateOfEntrance(Date dateOfEntrance) {
+        this.dateOfEntrance = dateOfEntrance;
+    }
 
-    public void setDateOfEntrance(Date dateOfEntrance) { this.dateOfEntrance = dateOfEntrance; }
-
-    public String getDateOfSale() {
+    public Date getDateOfSale() {
         return dateOfSale;
     }
 
-    public void setDateOfSale(String dateOfSale) {
+    public void setDateOfSale(Date dateOfSale) {
         this.dateOfSale = dateOfSale;
     }
-
-    public RealEstateAgent getRealEstateAgent() {
-        return realEstateAgent;
-    }
-
-    public void setRealEstateAgent(RealEstateAgent realEstateAgent) {
-        this.realEstateAgent = realEstateAgent;
-    }
+*/
 }

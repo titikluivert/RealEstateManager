@@ -15,7 +15,8 @@
 
 
     <string name="description">Description</string>
-    <string name="send">Next</string>
+    <string name="next">Next</string>
+    <string name="send">Upload</string>
     <string name="price">Price</string>
     <string name="type">Type</string>
     <string name="address">Address</string>

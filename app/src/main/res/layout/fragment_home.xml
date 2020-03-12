@@ -3,29 +3,29 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_coordinate_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controler.fragments.HomeFragment">
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/main_swipe_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".controler.fragments.HomeFragment">
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewHome"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/main_swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".controler.fragments.HomeFragment">
 
-    </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

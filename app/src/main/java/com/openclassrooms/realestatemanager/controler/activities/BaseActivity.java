@@ -3,8 +3,6 @@ package com.openclassrooms.realestatemanager.controler.activities;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -13,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

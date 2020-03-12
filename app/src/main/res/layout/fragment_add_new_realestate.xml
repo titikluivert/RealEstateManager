@@ -65,11 +65,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+
                 <EditText
                     android:id="@+id/realEstatePrice"
                     style="@style/modifiedEditText"
+                    android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/price"
+                    android:inputType="number"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -81,9 +84,13 @@
 
                 <EditText
                     android:id="@+id/realEstateSurface"
+                    android:layout_weight="1"
+                    android:ems="10"
                     style="@style/modifiedEditText"
                     android:hint="@string/surface"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="numberDecimal" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -93,8 +100,13 @@
 
                 <EditText
                     android:id="@+id/realEstateNumOfRooms"
+                    android:layout_weight="1"
                     style="@style/modifiedEditText"
-                    android:hint="@string/numberOfRooms" />
+                    android:hint="@string/numberOfRooms"
+                    android:ems="10"
+                    android:inputType="number" />
+
+
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -120,7 +132,7 @@
                 android:layout_gravity="end"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/centre_button"
-                android:text="@string/send"
+                android:text="@string/next"
                 android:textColor="@color/whiteTextColor" />
 
         </LinearLayout>

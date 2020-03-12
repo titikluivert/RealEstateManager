@@ -1,18 +1,43 @@
 package com.openclassrooms.realestatemanager.api;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import static com.openclassrooms.realestatemanager.utils.mainUtils.REAL_ESTATE;
 
 public class RealEstateHelper {
+
 
     public static DatabaseReference getRealEstateCollection() {
         return FirebaseDatabase.getInstance().getReference(REAL_ESTATE);
     }
 
 
+    public static FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    public static Boolean isCurrentUserLogged() {
+        return (getCurrentUser() != null);
+    }
+
+    public static OnFailureListener onFailureListener() {
+        return new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //showToast(getString(R.string.error_unknown_error));
+            }
+        };
+    }
 
 /*    public static Query getAllMessageForChat(String uIdBetween2Chats) {
         return ChatHelper.getChatCollection()

@@ -1,49 +1,131 @@
 package com.openclassrooms.realestatemanager.controler.fragments;
 
+import android.content.ClipData;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.webkit.MimeTypeMap;
+import android.widget.ProgressBar;
+import android.os.Handler;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.api.RealEstateHelper;
-import com.openclassrooms.realestatemanager.model.RealEstateModel;
+import com.openclassrooms.realestatemanager.model.UploadImage;
+import com.openclassrooms.realestatemanager.model.UsersModel;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.openclassrooms.realestatemanager.utils.mainUtils.saveParamEstateInfo;
-
+import static android.app.Activity.RESULT_OK;
+import static com.openclassrooms.realestatemanager.utils.mainUtils.REAL_ESTATE;
 
 public class EstateFragment_2 extends BaseFragment {
 
+    private static final int PICK_IMAGES = 1;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
 
     public EstateFragment_2() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         View view = inflater.inflate(R.layout.estate_fragment_layout_2, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
-    /**
+    @OnClick(R.id.btnSend)
+    void takeImg() {
+        Intent gallery = new Intent();
+        gallery.setType("image/*");
+        gallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(gallery, "Select various images"), PICK_IMAGES);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGES && resultCode == RESULT_OK && data != null) {
+            ClipData clipData = data.getClipData();
+
+            if (clipData != null) {
+
+                UsersModel usersModel = getUserInFireStore();
+
+                for (int i = 0; i < clipData.getItemCount(); i++) {
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Uri uri = item.getUri();
+                    uploadFile(uri, usersModel.getUid());
+                    Log.e("Imgs", uri.toString());
+                }
+
+            } else {
+                this.showToast(getContext(), "Please select at least two image");
+            }
+        }
+
+        this.replaceFragment(new HomeFragment());
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = Objects.requireNonNull(getContext()).getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile( Uri mImageUri, String uid) {
+        if (mImageUri != null) {
+            StorageReference fileReference = mStorageRef.child(uid).child(System.currentTimeMillis()
+                    + "." + getFileExtension(mImageUri));
+
+            fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Handler handler = new Handler();
+                        handler.postDelayed(() -> mProgressBar.setProgress(0), 500);
+
+                        showToast(getContext(), "Upload successful");
+                        UploadImage upload = new UploadImage("Image", taskSnapshot.getStorage().getDownloadUrl().toString());
+                        String uploadId = mDatabaseRef.push().getKey();
+                        mDatabaseRef.child(REAL_ESTATE).child(uid).child(Objects.requireNonNull(uploadId)).setValue(upload);
+                    })
+                    .addOnFailureListener(e -> showToast(getContext(), e.getMessage()))
+                    .addOnProgressListener(taskSnapshot -> {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                        mProgressBar.setProgress((int) progress);
+                    });
+        } else {
+            showToast(getContext(), "No file selected");
+        }
+    }
+}
+
+
+
+
+    /*
     @OnClick (R.id.addNewRealEstate_fab)
     public void addNewRealEstate(){
         if(callback!= null)
@@ -60,40 +142,6 @@ public class EstateFragment_2 extends BaseFragment {
 
         writeNewRealEstate(realEstateType.getText().toString(), userInfo);
  */
-
-
-
-    private void writeNewRealEstate(String realEstateType, RealEstateModel user) {
-        RealEstateHelper.getRealEstateCollection().child(realEstateType).setValue(user);
-
-    }
-
-    private void deleteNewUser() {
-
-        RealEstateHelper.getRealEstateCollection().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> keys = dataSnapshot.getChildren();
-                for (DataSnapshot key : keys) {
-                    Iterable<DataSnapshot> keys2 = key.getChildren();
-                    for (DataSnapshot key0 : keys2) {
-                       /* if (!nameRestaurant.equals(key.getKey()) || dataChanged) {
-                            if (Objects.requireNonNull(key0.getKey()).equals(uid))
-                                RealEstateHelper.getRestaurantCollection().child(Objects.requireNonNull(key.getKey())).child(uid).removeValue();
-                        }*/
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-
-        });
-
-    }
-
    /* private void updateRestaurantSelectedParams(RealEstateModel realEstateModel) {
 
         String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
@@ -122,5 +170,3 @@ public class EstateFragment_2 extends BaseFragment {
                         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
                         String dateOfEntrance = df.format(Calendar.getInstance().getTime());*/
 
-
-}

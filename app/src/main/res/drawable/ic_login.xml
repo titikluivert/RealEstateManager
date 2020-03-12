@@ -5,18 +5,21 @@
     android:viewportWidth="512"
     android:viewportHeight="512">
     <group>
-        <clip-path android:pathData="M0,0h512v512h-512z M 0,0"/>
-        <path
-            android:pathData="M-70.0,115.0a371.5,330.0,0,1,0,743.0,0.0a371.5,330.0,0,1,0,-743.0,0.0z">
+        <clip-path android:pathData="M0,0h512v512h-512z M 0,0" />
+        <path android:pathData="M-70.0,115.0a371.5,330.0,0,1,0,743.0,0.0a371.5,330.0,0,1,0,-743.0,0.0z">
             <aapt:attr name="android:fillColor">
                 <gradient
-                    android:startY="169"
-                    android:startX="270"
-                    android:endY="-2705"
                     android:endX="3084"
+                    android:endY="-2705"
+                    android:startX="270"
+                    android:startY="169"
                     android:type="linear">
-                    <item android:offset="0" android:color="#FF954CFB"/>
-                    <item android:offset="1" android:color="#FFFFFFFF"/>
+                    <item
+                        android:color="#3F51B5"
+                        android:offset="0" />
+                    <item
+                        android:color="#FFFFFFFF"
+                        android:offset="1" />
                 </gradient>
             </aapt:attr>
         </path>

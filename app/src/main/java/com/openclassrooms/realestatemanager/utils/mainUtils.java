@@ -75,18 +75,7 @@ public class mainUtils {
         return wifi.isWifiEnabled();
     }
 
-
-
-    // ---
-    private String convertDateToHour(Date date){
-        DateFormat dfTime = new SimpleDateFormat("HH:mm");
-        return dfTime.format(date);
-    }
-
-
-
-    public static  void saveParamEstateInfo (Context context, String realEstateType, String realEstatePrice, String realEstateSurface, String realEstateNumOfRooms, String realEstateDescription, String realEstateAddress)
-    {
+   /* public static void saveParamEstateInfo(Context context, String realEstateType, String realEstatePrice, String realEstateSurface, String realEstateNumOfRooms, String realEstateDescription, String realEstateAddress) {
 
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -100,7 +89,6 @@ public class mainUtils {
         editor.apply();
     }
 
-
     public static RealEstateModelPref getParamEstateInfo(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -113,5 +101,11 @@ public class mainUtils {
 
         );
 
+    }
+*/
+    // ---
+    private String convertDateToHour(Date date) {
+        DateFormat dfTime = new SimpleDateFormat("HH:mm");
+        return dfTime.format(date);
     }
 }
