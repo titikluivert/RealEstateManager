@@ -8,6 +8,7 @@
 
     <string name="your_lunch">Your Profile</string>
     <string name="settings">Settings</string>
+    <string name="share">Share Data</string>
     <string name="logout">Log out</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -23,7 +24,8 @@
     <string name="surface">Surface</string>
     <string name="numberOfRooms">Number of rooms</string>
 
-
+    <string name="title_permission">Cette application a besoin de permission pour fonctionner</string>
+    <string name="real_estate_info_share">Partager votre immobilier sur</string>
     <!-- Share preferences -->
 
     <string name="typePref">RealEstateType</string>
@@ -32,5 +34,50 @@
     <string name="surfacePref">RealEstateSurface</string>
     <string name="numbeOfRoomsPref">RealEstateNumOfRooms</string>
     <string name="descriptionPref">RealEstateTypeDescription</string>
+    <string name="location">Location</string>
+
+    <string name="search_query_term">Search query term</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="end_date">End Date</string>
+    <string name="arts">Arts</string>
+    <string name="business">Business</string>
+    <string name="entrepreneurs">Entrepreneurs</string>
+    <string name="politics">Politics</string>
+    <string name="sports">Sports</string>
+    <string name="travel">Travel</string>
+    <string name="search">SEARCH</string>
+    <string name="enable_notifications_once_per_day">Enable notifications (once per day)</string>
+    <string name="enable_search_by_date">Filter by date</string>
+    <string name="search_menu">Search</string>
+    <string name="notifications">Notifications</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string-array name="topicArray">
+
+        <item> @string/arts</item>
+        <item> @string/business</item>
+        <item> @string/entrepreneurs</item>
+        <item> @string/politics</item>
+        <item> @string/sports</item>
+        <item> @string/travel</item>
+
+    </string-array>
+    <string name="title_activity_base_seach_notif">BaseSeachNotifActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>

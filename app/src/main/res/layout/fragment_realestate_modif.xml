@@ -4,17 +4,20 @@
     android:id="@+id/scrollFeed"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_shadow_end_color"
+    android:background="#fff"
     android:focusableInTouchMode="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/personalDetailsCard"
-        style="@style/centreLocatorCardDesign"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="10dp">
+    <ImageButton
+            android:id="@+id/closeFormEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_close_black_24dp"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
+                android:textColor="@color/colorAccent"
                 android:text=" Real Estate Data"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -40,7 +44,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/realEstateType"
+                    android:id="@+id/realEstateTypeEdit"
                     style="@style/modifiedEditText"
                     android:hint="@string/type"
                     android:singleLine="true" />
@@ -53,7 +57,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/realEstateAddress"
+                    android:id="@+id/realEstateAddressEdit"
                     style="@style/modifiedEditText"
                     android:hint="@string/address"
                     android:singleLine="true" />
@@ -67,7 +71,7 @@
 
 
                 <EditText
-                    android:id="@+id/realEstatePrice"
+                    android:id="@+id/realEstatePriceEdit"
                     style="@style/modifiedEditText"
                     android:layout_weight="1"
                     android:ems="10"
@@ -83,13 +87,13 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/realEstateSurface"
+                    android:id="@+id/realEstateSurfaceEdit"
+                    style="@style/modifiedEditText"
                     android:layout_weight="1"
                     android:ems="10"
-                    style="@style/modifiedEditText"
                     android:hint="@string/surface"
-                    android:singleLine="true"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,13 +103,12 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/realEstateNumOfRooms"
-                    android:layout_weight="1"
+                    android:id="@+id/realEstateNumOfRoomsEdit"
                     style="@style/modifiedEditText"
-                    android:hint="@string/numberOfRooms"
+                    android:layout_weight="1"
                     android:ems="10"
+                    android:hint="@string/numberOfRooms"
                     android:inputType="number" />
-
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -117,7 +120,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/realEstateDescription"
+                    android:id="@+id/realEstateDescriptionEdit"
                     style="@style/modifiedEditText"
                     android:hint="@string/description"
                     android:inputType="textMultiLine"
@@ -125,18 +128,77 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtInputFeedback1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/realEstate_dateEntranceEdit"
+                    style="@style/modifiedEditText"
+                    android:hint="Date of entrance" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtInputFeedback2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/statusEdit"
+                    style="@style/modifiedEditText"
+                    android:hint="Status" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtInputFeedback3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/dateOfSaleEdit"
+                    style="@style/modifiedEditText"
+                    android:hint="Date of sale" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <ImageButton
+
+                android:id="@+id/uploadPhotosEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/uploadphoto" />
+
+            <TextView
+                style="@style/modifiedEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text=" Tap on icon to upload photo"
+                android:textSize="12sp" />
+
+
             <Button
-                android:id="@+id/btnSend"
+                android:id="@+id/btnSendEdit"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/centre_button"
-                android:text="@string/next"
+                android:text="Modify"
                 android:textColor="@color/whiteTextColor" />
+
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

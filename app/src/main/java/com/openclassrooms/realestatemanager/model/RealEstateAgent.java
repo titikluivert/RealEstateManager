@@ -1,15 +1,32 @@
 package com.openclassrooms.realestatemanager.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class RealEstateAgent {
 
+    @PrimaryKey
+    private long id;
     private String name;
     private String phoneNumber;
-    private String eMail;
+    private String email;
 
-    public RealEstateAgent(String name, String phoneNumber, String eMail) {
+
+    public RealEstateAgent(long id, String name, String phoneNumber, String email) {
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.eMail = eMail;
+        this.email = email;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -28,13 +45,11 @@ public class RealEstateAgent {
         this.phoneNumber = phoneNumber;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
-
 }

@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,9 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 
 public class LoginFragment extends BaseFragment {
 
@@ -125,7 +122,7 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void onLoginSuccess() {
-        this.replaceFragment(new EstateFragment_1());
+        this.replaceFragment(new EstateFragment());
 
     }
 

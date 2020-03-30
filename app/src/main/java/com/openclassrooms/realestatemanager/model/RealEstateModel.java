@@ -1,11 +1,19 @@
 package com.openclassrooms.realestatemanager.model;
 
-import com.google.firebase.firestore.ServerTimestamp;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
-import java.util.Date;
+import java.util.List;
 
+@Entity(tableName = "Real_Estate", foreignKeys = @ForeignKey(entity = RealEstateAgent.class, parentColumns = "id", childColumns = "realEstateAgentId"), indices = @Index("realEstateAgentId"))
 public class RealEstateModel {
 
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;
 
     private String type;
     private String price;
@@ -13,33 +21,29 @@ public class RealEstateModel {
     private String roomNumbers;
     private String description;
     private String address;
-   // private String status;
-    //private Date dateOfEntrance;
-   // private Date dateOfSale;
+    private List<String> photos;
+    private String status;
+    private String dateOfEntrance;
+    private String dateOfSale;
+    private long realEstateAgentId;
 
 
-  /**  public RealEstateModel(String type, String price, String surface, String roomNumbers, String description, String address, String status) {
-        this.type = type;
-        this.price = price;
-        this.surface = surface;
-        this.roomNumbers = roomNumbers;
-        this.description = description;
-        this.address = address;
-        this.status = status;
-    }*/
-
-    public RealEstateModel(String type, String price, String surface, String roomNumbers, String description, String address) {
-        this.type = type;
-        this.price = price;
-        this.surface = surface;
-        this.roomNumbers = roomNumbers;
-        this.description = description;
-        this.address = address;
+    @Ignore
+    public RealEstateModel() {
     }
 
-
-    public RealEstateModel(String type, String price, String surface, String numOfRooms, String description, String s, String b, String dateOfEntrance, String s1, String  o) {
-
+    public RealEstateModel(String type, String price, String surface, String roomNumbers, String description, String address, List<String> photos, String status, String dateOfEntrance, String dateOfSale, long realEstateAgentId) {
+        this.type = type;
+        this.price = price;
+        this.surface = surface;
+        this.roomNumbers = roomNumbers;
+        this.description = description;
+        this.address = address;
+        this.photos = photos;
+        this.status = status;
+        this.dateOfEntrance = dateOfEntrance;
+        this.dateOfSale = dateOfSale;
+        this.realEstateAgentId = realEstateAgentId;
     }
 
 
@@ -91,8 +95,23 @@ public class RealEstateModel {
         this.address = address;
     }
 
-/**
- public String isStatus() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public String getStatus() {
         return status;
     }
 
@@ -100,23 +119,28 @@ public class RealEstateModel {
         this.status = status;
     }
 
-
-    @ServerTimestamp
-    public Date getDateOfEntrance() {
+    public String getDateOfEntrance() {
         return dateOfEntrance;
     }
 
-
-    public void setDateOfEntrance(Date dateOfEntrance) {
+    public void setDateOfEntrance(String dateOfEntrance) {
         this.dateOfEntrance = dateOfEntrance;
     }
 
-    public Date getDateOfSale() {
+    public String getDateOfSale() {
         return dateOfSale;
     }
 
-    public void setDateOfSale(Date dateOfSale) {
+    public void setDateOfSale(String dateOfSale) {
         this.dateOfSale = dateOfSale;
     }
-*/
+
+    public long getRealEstateAgentId() {
+        return realEstateAgentId;
+    }
+
+    public void setRealEstateAgentId(long realEstateAgentId) {
+        this.realEstateAgentId = realEstateAgentId;
+    }
+
 }
