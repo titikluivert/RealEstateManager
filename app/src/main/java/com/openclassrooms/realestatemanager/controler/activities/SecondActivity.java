@@ -1,12 +1,11 @@
 package com.openclassrooms.realestatemanager.controler.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,19 +14,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.controler.fragments.EstateModificationFragment;
+
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
+import com.openclassrooms.realestatemanager.utils.mainUtils;
 import com.openclassrooms.realestatemanager.view.PhotoViewAdapter;
-import com.openclassrooms.realestatemanager.viewmodel.RealEstateViewModel;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +34,9 @@ import static com.openclassrooms.realestatemanager.utils.mainUtils.getLocationFr
 
 
 public class SecondActivity extends BaseActivity {
+
+    static final int REQUEST_MODIFY_REAL_ESTATE_CODE = 15;
+    public static final String EXTRA_MODIFY_REAL_ESTATE = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_MODIFY_REAL_ESTATE";
 
     @BindView(R.id.textroom)
     TextView textRoom;
@@ -57,9 +57,7 @@ public class SecondActivity extends BaseActivity {
     RecyclerView recyclerView;
 
     // FOR DESIGN
-    private RealEstateViewModel realEstateViewModel;
-    private RealEstateModel realEstateModel;
-
+    private RealEstateModel realEstateModel, realEstateModelFromSecondActivity;
 
     private boolean deleteItem = false;
 
@@ -68,25 +66,33 @@ public class SecondActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         ButterKnife.bind(this);
-        this.configureToolbar();
 
         ArrayList<UploadImage> items = new ArrayList<>();
         PhotoViewAdapter adapter = new PhotoViewAdapter(this, items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
-
-        // view model
-        realEstateViewModel = ViewModelProviders.of(this).get(RealEstateViewModel.class);
-
+        // coming from main activity
         realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
+        //coming from map activity
+        RealEstateModel realEstateModelFromMap = restoreRealEstateModel(getIntent().getStringExtra(mainUtils.EXTRA_MAP_TO_SECOND));
 
+        if (realEstateModel == null) {
+            if (realEstateModelFromSecondActivity != null) {
+                realEstateModel = realEstateModelFromSecondActivity;
+            } else {
+                realEstateModel = realEstateModelFromMap;
+            }
+        }
         for (int i = 0; i < realEstateModel.getPhotos().size(); i++) {
             items.add(new UploadImage("Image " + i, realEstateModel.getPhotos().get(i)));
             adapter.notifyDataSetChanged();
         }
-
+        try {
+            Glide.with(this).load(getGoogleMapUrl(this, realEstateModel.getAddress())).into(mapImg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.updateUI(realEstateModel);
-        Glide.with(this).load("https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=15&size=200x200&maptype=terrain&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&key=AIzaSyCXBKZ5tT07uT8XdXsUuAMsVkV-Uxs70E8").into(mapImg);
 
         adapter.setOnItemLongClickListener(photos -> {
 
@@ -97,6 +103,8 @@ public class SecondActivity extends BaseActivity {
             builder1.setPositiveButton(
                     "Yes",
                     (dialog, id) -> {
+                       // adapter.getItemCount();
+                    //    items.remove();
                         deleteItem = true;
                         dialog.cancel();
                     });
@@ -109,78 +117,47 @@ public class SecondActivity extends BaseActivity {
 
         });
 
-       /* if (deleteItem) {
-            adapter.removeAt();
-
-            ItemClickSupport.removeFrom(recyclerView, R.layout.photos_items);
-            RealEstateModel updateRealEstate = //adapter.getRealEstateAt(viewHolder.getAdapterPosition());
-                    updateRealEstate.setStatus("Sale");
-            updateRealEstate.setDateOfSale(mainUtils.getTodayDate());
-            realEstateViewModel.update(updateRealEstate);
-            deleteItem = false;
-
-
-        }*/
-
-
     }
-
 
     @OnClick(R.id.ModifyRealEstate_fab)
     public void ModifyRealEstate() {
         String estateModelString = new Gson().toJson(realEstateModel);
-        this.openFragment(EstateModificationFragment.newInstance(estateModelString));
+        Intent myIntent = new Intent(SecondActivity.this, ModificationActivity.class);
+        myIntent.putExtra(EXTRA_MODIFY_REAL_ESTATE,estateModelString);
+        this.startActivityForResult(myIntent, REQUEST_MODIFY_REAL_ESTATE_CODE);
 
     }
 
-
-    private RealEstateModel restoreRealEstateModel(String s) {
-        return new Gson().fromJson(s, new TypeToken<RealEstateModel>() {
-        }.getType());
+    @OnClick(R.id.closeForm2Activity)
+    public void backToMain() {
+        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
-    private void configureToolbar() {
-        ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
-    }
 
     private void updateUI(RealEstateModel estateModel) {
 
-        textRoom.setText(String.format("Number of rooms : %s", estateModel.getRoomNumbers()));
-        textSurface.setText(String.format("Surface : %s sqm", estateModel.getSurface()));
-        textDateSale.setText(String.format("Date de vente : %s", estateModel.getDateOfSale()));
+        textRoom.setText("Number of rooms : " + estateModel.getRoomNumbers());
+        textSurface.setText("Surface : " + estateModel.getSurface() + " sqm");
+        textDateSale.setText("Date of sale : " + estateModel.getDateOfSale());
         textDescriptionContent.setText(estateModel.getDescription());
     }
 
-    public String getGoogleMapThumbnail(Context ctx, String myAddress) throws IOException {
-        GeoPoint location = getLocationFromAddress(ctx, myAddress);
+    public String getGoogleMapUrl(Context ctx, String myAddress) throws IOException {
+        double[] location = getLocationFromAddress(ctx, myAddress);
         assert location != null;
-        String URL = "http://maps.google.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=15&size=200x200&sensor=false";
-        String zoom = "13";
-        String size = "600x300";
-        String maptype = "roadmap";
-        String markers = "=color:blue%7Clabel:S%7C40.702147,-74.015794";
-        String key = "google_maps_key";
-        String myUrl = URL;
-
-        return URL;
-
+        String URL = "https://maps.google.com/maps/api/staticmap?center=" + location[0] + "," + location[1];
+        String zoom = "&zoom=16";
+        String size = "&size=200x200";
+        String mapType = "&maptype=terrain";
+        String markers = "&markers=size:tiny%7Ccolor:red%7C" + location[0] + "," + location[1];
+        String key = "&key=AIzaSyCXBKZ5tT07uT8XdXsUuAMsVkV-Uxs70E8";
+        return (URL + zoom + size + mapType + markers + key);
     }
 
     private void openFragment(Fragment mFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container_modif, mFragment).commit();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 }

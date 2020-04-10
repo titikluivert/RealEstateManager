@@ -4,6 +4,9 @@ import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import org.junit.Test;
 
+import java.util.Date;
+
+import static com.openclassrooms.realestatemanager.utils.mainUtils.getTodayDate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -21,8 +24,8 @@ public class ExampleUnitTest {
     @Test
     public void toDayDateTest() throws Exception {
 
-        assertEquals("30/03/2020", mainUtils.getConvertDate(mainUtils.getTodayDate()));
-        assertNotEquals("23/03/2020", mainUtils.getConvertDate(mainUtils.getTodayDate()));
+        assertEquals("07/04/2020", mainUtils.getConvertDate(getTodayDate()));
+        assertNotEquals("23/03/2020", mainUtils.getConvertDate(getTodayDate()));
     }
 
 
@@ -38,6 +41,16 @@ public class ExampleUnitTest {
         assertEquals("2020/03/06", mainUtils.getConvertDate("6/3/2020"));
         assertEquals("2020/03/23", mainUtils.getConvertDate("23/03/2020"));
         assertNotEquals("2020/02/23", mainUtils.getConvertDate("23/03/2020"));
+    }
+
+
+    @Test
+    public void parseDateTest() {
+        Date result = mainUtils.DateConverters.fromTimestamp(Long.parseLong(getTodayDate().replace("/", "").trim()));
+        Long resultLong = mainUtils.DateConverters.dateToTimestamp(result);
+        String dateString = String.valueOf(resultLong);
+        String finalResult = mainUtils.changeStringToDate(dateString);
+        assertEquals(finalResult, mainUtils.getConvertDate(getTodayDate()));
     }
 
 }

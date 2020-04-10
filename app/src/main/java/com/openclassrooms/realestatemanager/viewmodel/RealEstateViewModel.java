@@ -28,12 +28,12 @@ public class RealEstateViewModel extends AndroidViewModel {
     private LiveData<List<RealEstateModel>> allRealEstates;
     private LiveData<List<RealEstateAgent>> currentUser;
 
+
     public RealEstateViewModel(@NonNull Application application) {
         super(application);
         repository = new RealEstateDataRepository(application);
        // realAgent  = new RealAgentDataRepository(application);
         allRealEstates = repository.getAllNotes();
-       // currentUser = realAgent.getUser();
 
     }
 
@@ -53,12 +53,35 @@ public class RealEstateViewModel extends AndroidViewModel {
         repository.delete(note);
     }
 
+
+
     public void deleteAllNotes() {
         repository.deleteAllNotes();
     }
 
+
     public LiveData<List<RealEstateModel>> getAllNotes() {
         return allRealEstates;
+    }
+
+    public LiveData<List<RealEstateModel>> SearchBySurfaceRepo(int minSurface, int maxSurface) {
+        return repository.SearchBySurface(minSurface,maxSurface);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchByPriceRepo(int minPrice, int maxPrice) {
+        return repository.SearchByPrice(minPrice,maxPrice);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchByOnlineSinceRepo(String dateOfEntrance) {
+        return repository.SearchByOnlineSince(dateOfEntrance);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchBySaleSinceRepo(String dateOfSale) {
+        return repository.SearchBySaleSince(dateOfSale);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchByAddressRepo(String address) {
+        return repository.SearchByAddress(address);
     }
 
 

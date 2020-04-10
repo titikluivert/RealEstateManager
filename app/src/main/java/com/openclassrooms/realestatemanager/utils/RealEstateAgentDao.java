@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.openclassrooms.realestatemanager.model.RealEstateAgent;
-
 import java.util.List;
 
 @Dao

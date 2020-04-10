@@ -6,25 +6,28 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
 import java.util.List;
 
-@Entity(tableName = "Real_Estate", foreignKeys = @ForeignKey(entity = RealEstateAgent.class, parentColumns = "id", childColumns = "realEstateAgentId"), indices = @Index("realEstateAgentId"))
-public class RealEstateModel {
+import static androidx.room.ForeignKey.CASCADE;
 
+@Entity(tableName = "Real_Estate", foreignKeys = @ForeignKey(entity = RealEstateAgent.class, parentColumns = "id", childColumns = "realEstateAgentId",onDelete = CASCADE), indices = @Index("realEstateAgentId"))
+public class RealEstateModel {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
 
     private String type;
-    private String price;
-    private String surface;
-    private String roomNumbers;
+    private double price;
+    private float surface;
+    private int roomNumbers;
     private String description;
     private String address;
     private List<String> photos;
-    private String status;
-    private String dateOfEntrance;
-    private String dateOfSale;
+    private boolean status;
+    private Date dateOfEntrance;
+    private Date dateOfSale;
+    private String poi;
     private long realEstateAgentId;
 
 
@@ -32,7 +35,8 @@ public class RealEstateModel {
     public RealEstateModel() {
     }
 
-    public RealEstateModel(String type, String price, String surface, String roomNumbers, String description, String address, List<String> photos, String status, String dateOfEntrance, String dateOfSale, long realEstateAgentId) {
+
+    public RealEstateModel(String type, double price, float surface, int roomNumbers, String description, String address, List<String> photos, boolean status, Date dateOfEntrance, Date dateOfSale, String poi, long realEstateAgentId) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -43,6 +47,7 @@ public class RealEstateModel {
         this.status = status;
         this.dateOfEntrance = dateOfEntrance;
         this.dateOfSale = dateOfSale;
+        this.poi = poi;
         this.realEstateAgentId = realEstateAgentId;
     }
 
@@ -55,27 +60,27 @@ public class RealEstateModel {
         this.type = type;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getSurface() {
+    public float getSurface() {
         return surface;
     }
 
-    public void setSurface(String surface) {
+    public void setSurface(float surface) {
         this.surface = surface;
     }
 
-    public String getRoomNumbers() {
+    public int getRoomNumbers() {
         return roomNumbers;
     }
 
-    public void setRoomNumbers(String roomNumbers) {
+    public void setRoomNumbers(int roomNumbers) {
         this.roomNumbers = roomNumbers;
     }
 
@@ -111,29 +116,38 @@ public class RealEstateModel {
         this.photos = photos;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public String getDateOfEntrance() {
+    public Date getDateOfEntrance() {
         return dateOfEntrance;
     }
 
-    public void setDateOfEntrance(String dateOfEntrance) {
+    public void setDateOfEntrance(Date dateOfEntrance) {
         this.dateOfEntrance = dateOfEntrance;
     }
 
-    public String getDateOfSale() {
+    public Date getDateOfSale() {
         return dateOfSale;
     }
 
-    public void setDateOfSale(String dateOfSale) {
+    public void setDateOfSale(Date dateOfSale) {
         this.dateOfSale = dateOfSale;
     }
+
+    public String getPoi() {
+        return poi;
+    }
+
+    public void setPoi(String poi) {
+        this.poi = poi;
+    }
+
 
     public long getRealEstateAgentId() {
         return realEstateAgentId;
@@ -142,5 +156,6 @@ public class RealEstateModel {
     public void setRealEstateAgentId(long realEstateAgentId) {
         this.realEstateAgentId = realEstateAgentId;
     }
+
 
 }

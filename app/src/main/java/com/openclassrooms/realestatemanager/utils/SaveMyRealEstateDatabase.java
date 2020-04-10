@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.model.RealEstateModel;
 
 
 @Database(entities = {RealEstateModel.class, RealEstateAgent.class}, version = 1, exportSchema = false)
-@TypeConverters(mainUtils.Converter.class)
+@TypeConverters({mainUtils.Converter.class , mainUtils.DateConverters.class})
 public abstract class SaveMyRealEstateDatabase extends RoomDatabase {
 
     // --- SINGLETON ---
@@ -50,16 +50,18 @@ public abstract class SaveMyRealEstateDatabase extends RoomDatabase {
         private RealEstateAgentDao realEstateAgtDao;
 
         private PopulateDbAsyncTask(SaveMyRealEstateDatabase db) {
-            realEstateDao = db.realEstateModelDao();
             realEstateAgtDao = db.realEstateAgentDao();
+            realEstateDao = db.realEstateModelDao();
+
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
+            realEstateDao.deleteAllNotes();
             realEstateAgtDao.createUser(new RealEstateAgent( 1,  "Maxwell", "0123456789", "test@test.de"));
-            /*realEstateDao.insertRealEstateModels(new RealEstateModel("Penthouse", "5000000", "250","5","very Good","Abstatt",
-                    null,"for sale","01.01.2020",null,1));*/
+            //realEstateDao.insertRealEstateModels(new RealEstateModel("Penthouse", "5000000", "250","5","very Good","Abstatt",
+                   // null,"for sale","01.01.2020",null,"restaurant",1));
             return null;
         }
     }

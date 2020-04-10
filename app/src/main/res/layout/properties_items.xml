@@ -12,12 +12,15 @@
 
         <ImageView
             android:id="@+id/estat_profil_photo"
-            android:layout_width="120dip"
-            android:layout_height="120dip" />
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="5dp"
             android:gravity="center"
             android:orientation="vertical">
 

@@ -1,64 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_main_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context=".controler.activities.MainActivity">
+    android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_main_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Real content goes here -->
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+            android:id="@+id/main_coordinate_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-
-                android:id="@+id/main_coordinate_container"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewHome"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"/>
 
-                <LinearLayout
-                    android:id="@+id/main_swipe_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addNewRealEstate_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_add_black_24dp"
+                app:layout_anchor="@id/recyclerViewHome"
+                app:layout_anchorGravity="bottom|right|end" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerViewHome"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                    </androidx.recyclerview.widget.RecyclerView>
+        <!-- The navigation drawer -->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/menu_drawer" />
 
-                </LinearLayout>
-
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/addNewRealEstate_fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_add_black_24dp"
-                    app:layout_anchor="@id/main_swipe_container"
-                    app:layout_anchorGravity="bottom|right|end" />
-
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        </FrameLayout>
-
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/menu_drawer">
-
-
-    </com.google.android.material.navigation.NavigationView>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>

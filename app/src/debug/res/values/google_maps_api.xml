@@ -4,12 +4,12 @@
 
     To get one, follow this link, follow the directions and press "Create" at the end:
 
-    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=1A:FE:E2:ED:7F:AA:95:83:EC:1F:EE:2B:BC:D8:1F:8B:FF:22:8F:4B%3Bcom.example.testmaps
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=1A:FE:E2:ED:7F:AA:95:83:EC:1F:EE:2B:BC:D8:1F:8B:FF:22:8F:4B%3Bcom.openclassrooms.realestatemanager.controler.activities
 
     You can also add your credentials to an existing key, using these values:
 
     Package name:
-    1A:FE:E2:ED:7F:AA:95:83:EC:1F:EE:2B:BC:D8:1F:8B:FF:22:8F:4B
+    com.openclassrooms.realestatemanager.controler.activities
 
     SHA-1 certificate fingerprint:
     1A:FE:E2:ED:7F:AA:95:83:EC:1F:EE:2B:BC:D8:1F:8B:FF:22:8F:4B
@@ -19,6 +19,7 @@
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
+      string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCXBKZ5tT07uT8XdXsUuAMsVkV-Uxs70E8</string>
 </resources>

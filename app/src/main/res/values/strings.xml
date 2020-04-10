@@ -79,5 +79,41 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="show_on_map">Show on map</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string-array name="locations">
+        <item>Mumbai</item>
+        <item>Delhi</item>
+        <item>Kolkata</item>
+        <item>Chennai</item>
+    </string-array>
+    <string-array name="places">
+        <item>Apartment</item>
+        <item>Loft</item>
+        <item>Manoir</item>
+        <item>Villa</item>
+        <item>Penthouse</item>
+        <item>Duplex</item>
+        <item>House</item>
+        <item>Flat</item>
+
+    </string-array>
+
+
+    <string name="save_lat__key">pref_key_lat</string>
+    <string name="save_Long__key">pref_key_lng</string>
+    <string name="save_vicinity_key">pref_key_vicinity</string>
+    <string name="save_restaurantName_key">pref_key_restaurantName</string>
+    <string name="save_photoRestaurant_key">pref_key_photoRestaurant</string>
+    <string name="save_rating_key">pref_key_rating</string>
+    <string name="save_photoHeight_key">pref_key_photoHeight</string>
+    <string name="save_photoWidth_key">pref_key_photoWidth</string>
+    <string name="save_photoRef_key">pref_key_photoRef</string>
+    <string name="save_number_of_stars_key">pref_key_number_of_stars</string>
+    <string name="save_uid_key">pref_key_uid</string>
+    <string name="save_list_restaurantSelected_key">save_list_restaurantSelected_key</string>
+    <string name="save_restaurantSelected_key">pref_restaurantSelected_uid</string>
+
 
 </resources>

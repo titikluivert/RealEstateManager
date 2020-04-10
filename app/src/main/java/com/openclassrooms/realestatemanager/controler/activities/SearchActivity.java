@@ -4,17 +4,13 @@ package com.openclassrooms.realestatemanager.controler.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Switch;
-
-import androidx.appcompat.app.ActionBar;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import java.util.Calendar;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +20,7 @@ import butterknife.OnClick;
 public class SearchActivity extends BaseActivity {
 
     public static final String SEARCH_RESULT = "com.openclassrooms.realestatemanager.controler.activities.SEARCH_RESULT";
+    public static final String regexS = "@";
 
     private String filterType;
 
@@ -76,23 +73,25 @@ public class SearchActivity extends BaseActivity {
     private String[] filterTypeArray = {"BY_SURFACE", "BY_PRICE", "BY_AVAILABILITY", "BY_SALE", "BY_ADDRESS", "BY_PHOTOS"};
     final String tableIndex = "012345";
 
-    private  int dateToday;
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_notif_seach);
         ButterKnife.bind(this);
         Switch[] AllEnabler = {enableSearchBySurface, enableSearchByPrice, enableSearchByOnlineSince,
-                               enableSearchBySaleSince, enableAddress, enablePhoto};
-        this.configureToolbar();
+                enableSearchBySaleSince, enableAddress, enablePhoto};
         this.getFilterType(AllEnabler);
+    }
+
+    @OnClick(R.id.closeFormSearch)
+    public void backToMain() {
+        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.search_button)
     public void searchFcn() {
         this.searchButtonMethod();
-
     }
 
     // search by availability
@@ -121,6 +120,7 @@ public class SearchActivity extends BaseActivity {
                     } else {
                         sqmBigin = bigindateTextSurface.getText().toString();
                         sqmEnd = enddateTextSurface.getText().toString();
+                        finishResult("BY_SURFACE" + regexS + sqmBigin + regexS + sqmEnd);
                     }
                     break;
                 case "BY_PRICE":
@@ -131,26 +131,29 @@ public class SearchActivity extends BaseActivity {
                     } else {
                         startPrice = bigindateTextSurface.getText().toString();
                         endPrice = enddateTextSurface.getText().toString();
+                        finishResult("BY_PRICE" + regexS + startPrice + regexS + endPrice);
                     }
                     break;
                 case "BY_AVAILABILITY":
                     String onlineSince;
-                    dateToday = Integer.parseInt(mainUtils.getTodayDate().replace("/", "").trim());
+                    int dateToday = Integer.parseInt(mainUtils.getTodayDate().replace("/", "").trim());
                     if (enddateTextOnlineSince.getText().toString().trim().equals("") || enddateTextOnlineSince.getText() == null
                             || dateToday < Integer.parseInt(mainUtils.getConvertDate(enddateTextOnlineSince.getText().toString().trim()).replace("/", ""))) {
                         showToast("date must be entered Or date should not be in the future");
                     } else {
-                        onlineSince = enddateTextOnlineSince.getText().toString();
+                        onlineSince = "BY_AVAILABILITY" + regexS + mainUtils.getConvertDate(mainUtils.getConvertDate(enddateTextOnlineSince.getText().toString()));
+                        finishResult(onlineSince);
                     }
                     break;
                 case "BY_SALE":
                     String saleSince;
                     dateToday = Integer.parseInt(mainUtils.getTodayDate().replace("/", "").trim());
-                    if (enableSearchBySaleSince.getText().toString().trim().equals("") || enableSearchBySaleSince.getText() == null
-                            || dateToday < Integer.parseInt(mainUtils.getConvertDate(enddateTextOnlineSince.getText().toString().trim()).replace("/", ""))) {
+                    if (enddateTextSaleSince.getText().toString().trim().equals("") || enddateTextSaleSince.getText() == null
+                            || dateToday < Integer.parseInt(mainUtils.getConvertDate(enddateTextSaleSince.getText().toString().trim()).replace("/", ""))) {
                         showToast("date must be entered Or date should not be in the future");
                     } else {
-                        saleSince = enableSearchBySaleSince.getText().toString();
+                        saleSince = "BY_SALE" + regexS + mainUtils.getConvertDate(mainUtils.getConvertDate(enddateTextSaleSince.getText().toString()));
+                        finishResult(saleSince);
                     }
                     break;
                 case "BY_ADDRESS":
@@ -158,7 +161,8 @@ public class SearchActivity extends BaseActivity {
                     if (searchTextCity.getText().toString().trim().equals("") || searchTextCity.getText() == null) {
                         showToast("you must enter an address");
                     } else {
-                        address = searchTextCity.getText().toString();
+                        address = "BY_ADDRESS" + regexS + searchTextCity.getText().toString();
+                        finishResult(address);
                     }
                     break;
 
@@ -168,8 +172,10 @@ public class SearchActivity extends BaseActivity {
                             || Integer.parseInt(numberTextPhoto.getText().toString().trim()) < 1) {
                         showToast("you must enter a number Or the number must be greater than zero");
                     } else {
-                        numOfPhotos = numberTextPhoto.getText().toString();
+                        numOfPhotos = "BY_PHOTOS" + regexS + numberTextPhoto.getText().toString();
+                        finishResult(numOfPhotos);
                     }
+
                     break;
 
                 default:
@@ -177,8 +183,7 @@ public class SearchActivity extends BaseActivity {
                     finishResult(result);
                     break;
             }
-        }
-        else {
+        } else {
 
             showToast("please first select a filter mode");
         }
@@ -224,21 +229,6 @@ public class SearchActivity extends BaseActivity {
 
     }
 
-    private void configureToolbar() {
-        ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 }
 

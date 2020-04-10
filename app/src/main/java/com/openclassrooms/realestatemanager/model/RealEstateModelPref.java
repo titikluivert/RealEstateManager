@@ -8,15 +8,17 @@ public class RealEstateModelPref {
     private String surface;
     private String roomNumbers;
     private String description;
+    private String poi;
     private String address;
 
 
-    public RealEstateModelPref(String type, String price, String surface, String roomNumbers, String description, String address) {
+    public RealEstateModelPref(String type, String price, String surface, String roomNumbers, String description, String poi, String address) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.roomNumbers = roomNumbers;
         this.description = description;
+        this.poi = poi;
         this.address = address;
 
 
@@ -75,6 +77,14 @@ public class RealEstateModelPref {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPoi() {
+        return poi;
+    }
+
+    public void setPoi(String poi) {
+        this.poi = poi;
     }
 
 

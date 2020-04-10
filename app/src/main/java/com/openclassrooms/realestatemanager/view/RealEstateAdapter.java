@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.view;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
+import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.internal.ListenerClass;
-
-import static com.openclassrooms.realestatemanager.utils.mainUtils.REAL_ESTATE_SALE;
 
 /**
  * Created by Philippe on 28/02/2018.
@@ -44,18 +39,19 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
     public void onBindViewHolder(@NonNull RealEstateHolder holder, int position) {
         RealEstateModel currentNote = estateModels.get(position);
         holder.textViewType.setText(currentNote.getType());
-        holder.textViewCity.setText(currentNote.getAddress());
-        holder.textViewPrice.setText(String.valueOf(currentNote.getPrice()));
-
-        Glide.with(holder.itemView).load(currentNote.getPhotos().get(0)).into(holder.imageView);
-        //holder.imageView.setImageURI();
-        if (REAL_ESTATE_SALE){
+        String[] temp = currentNote.getAddress().split(",");
+        holder.textViewCity.setText(temp[1].trim());
+        holder.textViewPrice.setText(String.format("$%s", currentNote.getPrice()));
+        holder.imageView.setImageBitmap(mainUtils.loadImageBitmap(holder.itemView.getContext(),
+                currentNote.getPhotos().get(0)));
+       // Glide.with(holder.itemView.getContext()).asBitmap().load().into(holder.imageView);
+        if (currentNote.getDateOfSale() != null && !currentNote.getDateOfSale().equals("")) {
             holder.avatar_off.setVisibility(View.VISIBLE);
             holder.avatar_on.setVisibility(View.GONE);
-            REAL_ESTATE_SALE= false;
+        }else{
+            holder.avatar_off.setVisibility(View.GONE);
+            holder.avatar_on.setVisibility(View.VISIBLE);
         }
-        //Bitmap  bitmap = MediaStore.Images.Media.getBitmap(holder.itemView.getContext().getContentResolver(), );
-        //Glide.with(holder.itemView).load().apply(RequestOptions.circleCropTransform()).into(holder.imageView);
     }
 
     @Override
@@ -79,8 +75,8 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         private ImageView imageView;
         private TextView textViewCity;
         private TextView textViewPrice;
-        private  View avatar_on;
-        private  View avatar_off;
+        private View avatar_on;
+        private View avatar_off;
 
 
         public RealEstateHolder(View itemView) {

@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.UploadImage;
+import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import java.util.ArrayList;
 
@@ -40,14 +40,13 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         holder.itemTitle.setText(items.get(position).getName());
-        Glide.with(holder.itemView).load(items.get(position).getImageUrl()).into(holder.itemImage);
+        holder.itemImage.setImageBitmap(mainUtils.loadImageBitmap(holder.itemView.getContext(),items.get(position).getImageUrl()));
     }
 
     @Override
     public int getItemCount() {
         return items.size();
     }
-
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder {
 

@@ -17,7 +17,6 @@ public class UsersModel {
 
     }
 
-
     public UsersModel(String urlPicture, String username, String uid, boolean isConnected, String email, String phoneNumber) {
         this.urlPicture = urlPicture;
         this.username = username;

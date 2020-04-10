@@ -48,7 +48,15 @@ public class RealEstateContentProviderTest {
     public void getItemsWhenNoItemInserted() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(6));
+        assertThat(cursor.getCount(), is(1));
+        cursor.close();
+    }
+
+    @Test
+    public void getAgent() {
+        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
+        assertThat(cursor, notNullValue());
+        assertThat(cursor.getCount(), is(0));
         cursor.close();
     }
 
@@ -59,9 +67,9 @@ public class RealEstateContentProviderTest {
         // TEST
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(7));
+        assertThat(cursor.getCount(), is(2));
         assertThat(cursor.moveToFirst(), is(true));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Duplex"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Villa"));
     }
     // ---
 
@@ -77,6 +85,7 @@ public class RealEstateContentProviderTest {
         values.put("photos", "");
         values.put("dateOfEntrance","01/01/190");
         values.put("dateOfSale","");
+        values.put("poi","school, restaurant");
         values.put("realEstateAgentId", 1);
 
         return values;

@@ -18,12 +18,10 @@ public class RealEstateDataRepository {
 
     private final RealEstateModelDao estateModelDao;
 
-    private LiveData<List<RealEstateModel>> AllRealEstate;
 
     public RealEstateDataRepository(Application application) {
         SaveMyRealEstateDatabase database = SaveMyRealEstateDatabase.getInstance(application);
         estateModelDao = database.realEstateModelDao();
-        AllRealEstate = estateModelDao.getAllNotes();
     }
 
     public void insert(RealEstateModel note) {
@@ -43,8 +41,33 @@ public class RealEstateDataRepository {
     }
 
     public LiveData<List<RealEstateModel>> getAllNotes() {
-        return AllRealEstate;
+        return estateModelDao.getAllNotes();
     }
+
+    public LiveData<List<RealEstateModel>> SearchBySurface(int minSurface, int maxSurface) {
+        return estateModelDao.SearchBySurface(minSurface,maxSurface);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchByPrice(int minPrice, int maxPrice) {
+        return estateModelDao.SearchByPrice(minPrice,maxPrice);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchByOnlineSince(String dateOfEntrance) {
+        return estateModelDao.SearchByOnlineSince(dateOfEntrance);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchBySaleSince(String dateOfSale) {
+        return estateModelDao.SearchBySaleSince(dateOfSale);
+    }
+
+    public LiveData<List<RealEstateModel>> SearchByAddress(String address) {
+        return estateModelDao.SearchByAddress(address);
+    }
+
+   /* public LiveData<List<RealEstateModel>> SearchByPhoto(List<String> photo) {
+        return searchByPhoto;
+    }*/
+
 
     private static class InsertNoteAsyncTask extends AsyncTask<RealEstateModel, Void, Void> {
         private RealEstateModelDao noteDao;

@@ -24,7 +24,10 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import java.io.File;
@@ -55,6 +58,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
+    protected RealEstateModel restoreRealEstateModel(String s) {
+        return new Gson().fromJson(s, new TypeToken<RealEstateModel>() {
+        }.getType());
+    }
     // ----------------------------------
     // SHARE FILE
     // ----------------------------------

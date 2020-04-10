@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollFeed"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -113,6 +113,18 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtInputPOIEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/realEstatePOIEdit"
+                    style="@style/modifiedEditText"
+                    android:hint="The points of interest nearby"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtInputFeedback"
@@ -167,24 +179,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
-            <ImageButton
-
-                android:id="@+id/uploadPhotosEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:layout_weight="1"
-                android:background="@drawable/uploadphoto" />
-
-            <TextView
-                style="@style/modifiedEditText"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/addImageEdit"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text=" Tap on icon to upload photo"
-                android:textSize="12sp" />
+                style="?android:attr/buttonBarButtonStyle"
+                android:drawableStart="@drawable/ic_file_upload_black_24dp"
+                android:text="... click on icon to upload more images"
+                android:textAllCaps="false"
+                android:textAlignment="textEnd"/>
 
 
             <Button

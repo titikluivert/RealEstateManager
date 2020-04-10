@@ -24,29 +24,29 @@ public interface RealEstateModelDao {
     LiveData<List<RealEstateModel>> getAllNotes();
 
 
-    // only for search purpose
-    //_____________________________________________________________________________________________
-
     @Query("SELECT * FROM Real_Estate WHERE realEstateAgentId = :realEstateAgentId")
     Cursor getItemsWithCursor(long realEstateAgentId);
 
+    // only for search purpose
+    //_____________________________________________________________________________________________
+
     @Query("SELECT * FROM Real_Estate WHERE surface BETWEEN :minSurface AND :maxSurface")
-    LiveData<List<RealEstateModel>> SerachBySurface(int minSurface, int maxSurface);
+    LiveData<List<RealEstateModel>> SearchBySurface(int minSurface, int maxSurface);
 
     @Query("SELECT * FROM Real_Estate WHERE price BETWEEN :minPrice AND :maxPrice")
-    LiveData<List<RealEstateModel>> SerachByPrice(int minPrice, int maxPrice);
+    LiveData<List<RealEstateModel>> SearchByPrice(int minPrice, int maxPrice);
 
-    @Query("SELECT * FROM Real_Estate WHERE dateOfEntrance > :dateOfEntrace")
-    LiveData<List<RealEstateModel>> SearchByOnlineSince(String dateOfEntrace);
+    @Query("SELECT * FROM Real_Estate WHERE dateOfEntrance > :dateOfEntrance")
+    LiveData<List<RealEstateModel>> SearchByOnlineSince(String dateOfEntrance);
 
     @Query("SELECT * FROM Real_Estate WHERE dateOfSale > :dateOfSale")
     LiveData<List<RealEstateModel>> SearchBySaleSince(String dateOfSale);
 
     @Query("SELECT * FROM Real_Estate WHERE address = :address")
-    LiveData<List<RealEstateModel>> SearchByAddrees(String address);
+    LiveData<List<RealEstateModel>> SearchByAddress(String address);
 
-    @Query("SELECT * FROM Real_Estate WHERE photos > :photo")
-    LiveData<List<RealEstateModel>> SearchByAddrees(List<String> photo);
+   /* @Query("SELECT * FROM Real_Estate WHERE photos > :photo")
+    LiveData<List<RealEstateModel>> SearchByPhotos(List<String> photo);*/
 
     //_____________________________________________________________________________________________
 
