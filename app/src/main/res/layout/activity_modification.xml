@@ -273,13 +273,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:layout_marginBottom="@dimen/spacing_medium"
-                android:text="PLACE OF SALE"
+                android:text="DATE OF SALE"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/dateOfSaleEdit"
+                android:id="@+id/realEstate_dateOfSaleEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"

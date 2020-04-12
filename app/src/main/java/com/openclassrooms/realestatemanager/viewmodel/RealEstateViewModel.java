@@ -64,7 +64,7 @@ public class RealEstateViewModel extends AndroidViewModel {
         return allRealEstates;
     }
 
-    public LiveData<List<RealEstateModel>> SearchBySurfaceRepo(int minSurface, int maxSurface) {
+    public LiveData<List<RealEstateModel>> SearchBySurfaceRepo(float minSurface, float maxSurface) {
         return repository.SearchBySurface(minSurface,maxSurface);
     }
 

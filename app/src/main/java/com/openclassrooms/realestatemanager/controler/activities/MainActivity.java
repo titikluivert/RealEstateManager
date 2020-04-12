@@ -28,12 +28,14 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.api.RealEstateHelper;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
 import com.openclassrooms.realestatemanager.view.RealEstateAdapter;
 import com.openclassrooms.realestatemanager.viewmodel.RealEstateViewModel;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,9 +44,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.openclassrooms.realestatemanager.api.App.CHANNEL_1_ID;
+import static com.openclassrooms.realestatemanager.controler.activities.ModificationActivity.EXTRA_ID_CURRENT_ESTATE;
+import static com.openclassrooms.realestatemanager.controler.activities.ModificationActivity.EXTRA_RESULT_MODIFICATION;
 import static com.openclassrooms.realestatemanager.controler.activities.SearchActivity.SEARCH_RESULT;
 import static com.openclassrooms.realestatemanager.controler.activities.SearchActivity.regexS;
-import static com.openclassrooms.realestatemanager.utils.mainUtils.getTodayDate;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,6 +56,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final String EXTRA_MESSAGE = "com.openclassrooms.realestatemanager.controler.activities.MESSAGE";
     public static final String EXTRA_MAP = "com.openclassrooms.realestatemanager.controler.activities.MAP_DATA";
     static final int REQUEST_SEARCH_CODE = 1;
+    public static final int EDIT_REAL_ESTATE_REQUEST = 2;
     static final int REQUEST_ADD_REAL_ESTATE_CODE = 4;
 
     PlacesClient placesClient;
@@ -74,8 +78,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private NotificationManagerCompat notificationManager;
 
-    //private String dataToSave;
-    //private RealEstateModelPref dataToSave1;
     RealEstateAdapter adapter;
     private Menu menu;
 
@@ -127,7 +129,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 if (direction == ItemTouchHelper.RIGHT) {
                     RealEstateModel updateRealEstate = adapter.getRealEstateAt(viewHolder.getAdapterPosition());
                     updateRealEstate.setStatus(false);
-                    updateRealEstate.setDateOfSale(mainUtils.DateConverters.fromTimestamp(mainUtils.getTodayDate().replace("/", "").trim()));
+                    updateRealEstate.setDateOfSale(new Date());
                     realEstateViewModel.update(updateRealEstate);
                     Toast.makeText(MainActivity.this, "Sale date and Status were updated to sale", Toast.LENGTH_SHORT).show();
                 }
@@ -138,9 +140,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         adapter.setOnItemClickListener(realEstateModel -> {
             Intent intent = new Intent(MainActivity.this, SecondActivity.class);
             intent.putExtra(EXTRA_MESSAGE, new Gson().toJson(realEstateModel));
-            startActivity(intent);
-        });
+            startActivityForResult(intent, EDIT_REAL_ESTATE_REQUEST);
 
+        });
 
         mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(mToggle);
@@ -166,10 +168,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //3 - Handle actions on menu items
-        /*case R.id.menu_main_add:
-                this.openAddFragment(new EstateFragment_1());
-                return true;*/
         if (item.getItemId() == R.id.menu_main_search) {
             this.launchSearchActivity();
             return true;
@@ -241,7 +239,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 switch (dateTemp[0]) {
 
                     case "BY_SURFACE":
-                        realEstateViewModel.SearchBySurfaceRepo(Integer.parseInt(dateTemp[1]), Integer.parseInt(dateTemp[2])).observe(this, this.adapter::setNotes);
+                        realEstateViewModel.SearchBySurfaceRepo(Float.parseFloat(dateTemp[1]), Float.parseFloat(dateTemp[2])).observe(this, this.adapter::setNotes);
                         break;
                     case "BY_PRICE":
                         realEstateViewModel.SearchByPriceRepo(Integer.parseInt(dateTemp[1]), Integer.parseInt(dateTemp[2])).observe(this, this.adapter::setNotes);
@@ -276,6 +274,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showToast("error occurred was not able to add new real estate");
             }
         }
+
+        if (requestCode == EDIT_REAL_ESTATE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                long id = data.getLongExtra(EXTRA_ID_CURRENT_ESTATE, -1);
+                if (id == -1) {
+                    Toast.makeText(this, "Note can't be updated", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String resultString = data.getStringExtra(EXTRA_RESULT_MODIFICATION);
+                RealEstateModel estateModelModification = new Gson().fromJson(resultString, new TypeToken<RealEstateModel>() {
+                }.getType());
+                estateModelModification.setId(id);
+                this.updateFromModification(estateModelModification);
+            }
+            if (resultCode == RESULT_CANCELED) {
+                showToast("error occurred was not able to update current real estate");
+            }
+        }
+
     }
 
     public void updateUI(String data0, String data) {
@@ -283,11 +301,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         RealEstateModelPref data1 = new Gson().fromJson(data, new TypeToken<RealEstateModelPref>() {
         }.getType());
         RealEstateModel note = new RealEstateModel(data1.getType(), Double.parseDouble(data1.getPrice()), Float.parseFloat(data1.getSurface()), Integer.parseInt(data1.getRoomNumbers()), data1.getDescription(), data1.getAddress(),
-                photo, true, mainUtils.DateConverters.fromTimestamp(getTodayDate()), null, data1.getPoi(), 1);
+                photo, true, new Date(), null, data1.getPoi(), 1);
         realEstateViewModel.insert(note);
-        notification();
+        RealEstateHelper.writeNewRealEstate(note);
+        this.notification();
     }
 
+    public void updateFromModification(RealEstateModel data) {
+        RealEstateHelper.updateRealEstateChildren(data);
+        realEstateViewModel.update(data);
+    }
 
     private void notification() {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)

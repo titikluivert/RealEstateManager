@@ -29,9 +29,10 @@ public interface RealEstateModelDao {
 
     // only for search purpose
     //_____________________________________________________________________________________________
+   // @Query("select * from user where date_of_birth=Date(:date)")
 
     @Query("SELECT * FROM Real_Estate WHERE surface BETWEEN :minSurface AND :maxSurface")
-    LiveData<List<RealEstateModel>> SearchBySurface(int minSurface, int maxSurface);
+    LiveData<List<RealEstateModel>> SearchBySurface(float minSurface, float maxSurface);
 
     @Query("SELECT * FROM Real_Estate WHERE price BETWEEN :minPrice AND :maxPrice")
     LiveData<List<RealEstateModel>> SearchByPrice(int minPrice, int maxPrice);
@@ -42,7 +43,7 @@ public interface RealEstateModelDao {
     @Query("SELECT * FROM Real_Estate WHERE dateOfSale > :dateOfSale")
     LiveData<List<RealEstateModel>> SearchBySaleSince(String dateOfSale);
 
-    @Query("SELECT * FROM Real_Estate WHERE address = :address")
+    @Query("SELECT * FROM Real_Estate WHERE address LIKE '%' || :address  || '%'")
     LiveData<List<RealEstateModel>> SearchByAddress(String address);
 
    /* @Query("SELECT * FROM Real_Estate WHERE photos > :photo")

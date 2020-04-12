@@ -35,7 +35,6 @@ public class RealEstateModel {
     public RealEstateModel() {
     }
 
-
     public RealEstateModel(String type, double price, float surface, int roomNumbers, String description, String address, List<String> photos, boolean status, Date dateOfEntrance, Date dateOfSale, String poi, long realEstateAgentId) {
         this.type = type;
         this.price = price;

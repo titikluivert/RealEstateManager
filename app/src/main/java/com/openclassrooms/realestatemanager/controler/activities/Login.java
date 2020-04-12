@@ -4,18 +4,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.RealEstateAgent;
+import com.openclassrooms.realestatemanager.utils.mainUtils;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +43,6 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.login_realestate);
         ButterKnife.bind(this);
         init();
-
     }
 //    sharedPreferences.edit().putBoolean("loginUser", false).apply();
 //    sharedPreferences.edit().putBoolean("loginAdmin", false).apply();
@@ -53,6 +51,9 @@ public class Login extends AppCompatActivity {
     public void signInClick() {
         if (checkFieldsEmpty()) {
 
+
+            RealEstateAgent realEstateAgent = new RealEstateAgent(1, userName.getText().toString().trim(), phoneNumber.getText().toString().trim(), email.getText().toString().trim());
+            mainUtils.saveRealEstateAgent(this, realEstateAgent);
             if (userName.getText().toString().equals("user")) {
                 sharedPreferences.edit().putBoolean("loginUser", true).apply();
                 startActivity(new Intent(Login.this, MainActivity.class)
@@ -86,29 +87,29 @@ public class Login extends AppCompatActivity {
     }
 
     private void init() {
-       // userName = findViewById(R.id.username);
-       // password = findViewById(R.id.password);
+        // userName = findViewById(R.id.username);
+        // password = findViewById(R.id.password);
         //signIn = findViewById(R.id.signInBtn);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     }
 
     private boolean checkFieldsEmpty() {
-        if (userName.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(userName.getText()).toString().trim().isEmpty()) {
             Toast.makeText(this, "Please enter valid username", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (email.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(email.getText()).toString().trim().isEmpty()) {
             Toast.makeText(this, "Please enter valid email", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (phoneNumber.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(phoneNumber.getText()).toString().trim().isEmpty()) {
             Toast.makeText(this, "Please enter valid phone number", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (password.getText().toString().trim().isEmpty()) {
+        if (Objects.requireNonNull(password.getText()).toString().trim().isEmpty()) {
             Toast.makeText(this, "Please enter valid password", Toast.LENGTH_SHORT).show();
             return false;
         }

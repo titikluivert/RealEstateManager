@@ -37,6 +37,7 @@ import static com.openclassrooms.realestatemanager.controler.activities.SecondAc
 
 public class ModificationActivity extends BaseActivity {
 
+    public static final String EXTRA_ID_CURRENT_ESTATE = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_ID_CURRENT_ESTATE";
     public static final String EXTRA_RESULT_MODIFICATION = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_RESULT_MODIFICATION";
 
     private RealEstateModel realEstateModel, realEstateModelUpdated;
@@ -69,17 +70,14 @@ public class ModificationActivity extends BaseActivity {
     @BindView(R.id.realEstateDescriptionEdit)
     EditText realEstateDescriptionEdit;
 
-    @BindView(R.id.dateOfSaleEdit)
-    EditText dateOfSaleEdit;
+    @BindView(R.id.realEstate_dateEntranceEdit)
+    EditText realEstate_dateEntranceEdit;
 
     @BindView(R.id.statusEdit)
     EditText statusEdit;
 
-    @BindView(R.id.realEstate_dateEntranceEdit)
-    EditText realEstate_dateEntranceEdit;
-
-    // FOR DESIGN
-    private RealEstateViewModel realEstateViewModel;
+    @BindView(R.id.realEstate_dateOfSaleEdit)
+    EditText realEstate_dateOfSaleEdit;
 
 
     @Override
@@ -174,22 +172,16 @@ public class ModificationActivity extends BaseActivity {
         ArrayAdapter myAdap = (ArrayAdapter) realEstateTypeEdit.getAdapter(); //cast to an ArrayAdapter
 
         int spinnerPosition = myAdap.getPosition(estateModel.getType());
-
-//set the default according to value
         realEstateTypeEdit.setSelection(spinnerPosition);
-
-      //  realEstateTypeEdit.setSelection(((ArrayAdapter<String>) realEstateTypeEdit.getAdapter()).getPosition(estateModel.getType()));
-
-        //realEstateTypeEdit..setText(estateModel.getType() == null ? "" : estateModel.getType());
         realEstateSurfaceEdit.setText(String.valueOf(estateModel.getSurface()));
         realEstatePriceEdit.setText(String.valueOf(estateModel.getPrice()));
         realEstateAddressEdit.setText(estateModel.getAddress() == null ? "" : estateModel.getAddress());
         realEstateNumOfRoomsEdit.setText(String.valueOf(estateModel.getRoomNumbers()));
         realEstateDescriptionEdit.setText(estateModel.getDescription() == null ? "" : estateModel.getDescription());
-        dateOfSaleEdit.setText(mainUtils.changeStringToDate(String.valueOf(estateModel.getDateOfSale())));
-        realEstate_dateEntranceEdit.setText(mainUtils.changeStringToDate(String.valueOf(estateModel.getDateOfEntrance())));
+        realEstate_dateOfSaleEdit.setText(estateModel.getDateOfSale() == null ? "" : mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfSale())));
+        realEstate_dateEntranceEdit.setText( mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfEntrance())));
         realEstatePOIEdit.setText(estateModel.getPoi() == null ? "" : estateModel.getPoi());
-        statusEdit.setText(String.valueOf(estateModel.getStatus()));
+        statusEdit.setText(estateModel.getStatus() ? "Available" : "Sold");
 
     }
 
@@ -205,22 +197,12 @@ public class ModificationActivity extends BaseActivity {
                 photos_modification,
                 statusEdit.getText().toString().equals("Available"),
                 mainUtils.DateConverters.fromTimestamp(realEstate_dateEntranceEdit.getText().toString()),
-                mainUtils.DateConverters.fromTimestamp(dateOfSaleEdit.getText().toString()),
+                mainUtils.DateConverters.fromTimestamp(realEstate_dateOfSaleEdit.getText().toString()),
                 realEstatePOIEdit.getText().toString(),
                 1
         );
-    }
 
-    private void configureToolbar() {
-        // Get the toolbar view inside the activity layout
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        // Sets the Toolbar
-        setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        assert ab != null;
-        ab.setTitle("Modify Real Estate");
-        Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -237,8 +219,21 @@ public class ModificationActivity extends BaseActivity {
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EXTRA_RESULT_MODIFICATION, param_config);
+        resultIntent.putExtra(EXTRA_ID_CURRENT_ESTATE, realEstateModel.getId());
         setResult(RESULT_OK, resultIntent);
         finish();
 
+    }
+
+    private void configureToolbar() {
+        // Get the toolbar view inside the activity layout
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Sets the Toolbar
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        assert ab != null;
+        ab.setTitle("Modify Real Estate");
+        Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
     }
 }

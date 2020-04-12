@@ -17,7 +17,16 @@ public class MapActivity extends BaseActivity {
         setContentView(R.layout.activity_map);
         this.configureToolbar();
          getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,MapsViewFragment.newInstance(getIntent().getStringExtra(MainActivity.EXTRA_MAP))).commit();
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void configureToolbar() {
@@ -31,16 +40,5 @@ public class MapActivity extends BaseActivity {
         ab.setTitle("Real Estate on Map");
         Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 
 }

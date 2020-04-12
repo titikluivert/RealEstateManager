@@ -44,7 +44,7 @@ public class RealEstateDataRepository {
         return estateModelDao.getAllNotes();
     }
 
-    public LiveData<List<RealEstateModel>> SearchBySurface(int minSurface, int maxSurface) {
+    public LiveData<List<RealEstateModel>> SearchBySurface(float minSurface, float maxSurface) {
         return estateModelDao.SearchBySurface(minSurface,maxSurface);
     }
 

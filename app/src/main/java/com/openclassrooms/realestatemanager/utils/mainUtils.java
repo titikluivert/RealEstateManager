@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.utils;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,13 +10,22 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import androidx.room.TypeConverter;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.RealEstateAgent;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
+import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
+import com.openclassrooms.realestatemanager.model.UploadImage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +37,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Philippe on 21/02/2018.
@@ -34,13 +46,11 @@ import java.util.List;
 
 public class mainUtils {
 
+    public static final int AGENT_ID = 1;
+
     public static final float ZOOM_LEVEL = 15; //This goes up to 21
 
     public static final String REAL_ESTATE = "Real Estate";
-
-    // 1 - FILE PURPOSE
-    public static final String FILENAME = "estate_db.txt";
-    public static final String FOLDERNAME = "realEstate";
 
     public static final int PROXIMITY_RADIUS = 1000;
 
@@ -51,9 +61,9 @@ public class mainUtils {
     private static final double d2km = 111189.57696D * r2d;
 
     public static final String EXTRA_MAP_TO_SECOND = "MAP_TO_SECOND";
+    public static final String DATA_SECOND2MAIN_ACTIVITY = "EXTRA_MODIFY_REAL_ESTATE";
 
     public static final String ApiKeyGoogleID = "AIzaSyAEwrcgezK5dT7YYVWph2Z3K6CJB497Sa4";
-
 
     // 1 - Define the authority of the FileProvider
     //public static final String AUTHORITY="com.openclassrooms.realestatemanager.fileprovider";
@@ -87,7 +97,7 @@ public class mainUtils {
      * @return
      */
     public static String getTodayDate() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         return dateFormat.format(new Date());
     }
 
@@ -103,7 +113,7 @@ public class mainUtils {
         String[] dateTemp;
 
         if (date == null) {
-            convertDate = "01/01/1970";
+            convertDate = null;
 
         } else {
             dateTemp = date.split("/");
@@ -144,9 +154,9 @@ public class mainUtils {
         return wifi.isWifiEnabled();
     }*/
     public static Boolean isInternetAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return  (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
     }
 
     public static class Converter {
@@ -191,6 +201,7 @@ public class mainUtils {
 
         }
     }
+
     // --- UTILS ---
     public static RealEstateModel fromContentValues(ContentValues values) {
 
@@ -207,12 +218,11 @@ public class mainUtils {
         if (values.containsKey("photos"))
             estateModel.setPhotos(Converter.restoreList(values.getAsString("photos")));
         if (values.containsKey("dateOfEntrance"))
-            estateModel.setDateOfEntrance((Date) values.get("dateOfEntrance"));
+            estateModel.setDateOfEntrance(DateConverters.fromTimestamp(values.getAsString("dateOfEntrance")));
         if (values.containsKey("dateOfSale"))
-            estateModel.setDateOfSale((Date) values.get("dateOfSale"));
+            estateModel.setDateOfSale(DateConverters.fromTimestamp(values.getAsString("dateOfSale")));
         if (values.containsKey("realEstateAgentId"))
             estateModel.setRealEstateAgentId(values.getAsLong("realEstateAgentId"));
-
 
         return estateModel;
     }
@@ -220,7 +230,7 @@ public class mainUtils {
     // example converter for java.util.Date
     public static class DateConverters {
 
-        static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        static DateFormat df = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
 
         @TypeConverter
         public static Date fromTimestamp(String value) {
@@ -240,6 +250,7 @@ public class mainUtils {
         public static String dateToTimestamp(Date date) {
             return date == null ? null : df.format(date);
         }
+
     }
 
     public static boolean saveImageToInternalStorage(final Context context, final Bitmap image, String fileName) {
@@ -276,5 +287,58 @@ public class mainUtils {
         return context.getFileStreamPath(name).exists();
 
     }
+
+
+    private static String getFileExtension(Uri uri, Context ctx) {
+        ContentResolver cR = Objects.requireNonNull(ctx).getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    public static void uploadFile(Context context, Uri mImageUri, StorageReference mStorageRef, DatabaseReference mDatabaseRef, String uid, RealEstateModelPref user) {
+
+
+        if (mImageUri != null) {
+            StorageReference fileReference = mStorageRef.child(uid).child(user.getAddress()).child(System.currentTimeMillis()
+                    + "." + getFileExtension(mImageUri, context));
+
+            fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Toast.makeText(context, "Upload successful", Toast.LENGTH_SHORT).show();
+                        UploadImage upload = new UploadImage("Image", taskSnapshot.getStorage().getDownloadUrl().toString());
+                        String uploadId = mDatabaseRef.push().getKey();
+                        mDatabaseRef.child(REAL_ESTATE).child(uid).child(user.getAddress()).child("Images").child(Objects.requireNonNull(uploadId)).setValue(upload);
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show())
+                    .addOnProgressListener(taskSnapshot -> {
+                        //double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                        //mProgressBar.setProgress((int) progress);
+                    });
+        } else {
+            Toast.makeText(context, "No file selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void saveRealEstateAgent(Context context, RealEstateAgent notifyParam) {
+
+        Gson gson = new Gson();
+        String jsonCategoryList = gson.toJson(notifyParam);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.realEstateAgentProfile), jsonCategoryList);
+        editor.apply();
+    }
+
+    public static RealEstateAgent getRealEstateAgent(Context context) {
+
+        Gson gson = new Gson();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = sharedPreferences.getString(context.getString(R.string.realEstateAgentProfile), null);
+        Type type = new TypeToken<RealEstateAgent>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
 }
+
 

@@ -85,6 +85,7 @@
                 android:paddingRight="@dimen/spacing_large">
 
                 <TextView
+                    android:id="@+id/phoneNumberAgent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -102,7 +103,7 @@
                     android:layout_height="@dimen/spacing_xmlarge"
                     android:background="@android:color/transparent"
                     android:tint="@color/grey_60"
-                    app:srcCompat="@drawable/ic_picture_in_picture_black_24dp" />
+                    app:srcCompat="@drawable/ic_phone_android_black_24dp" />
 
             </LinearLayout>
 

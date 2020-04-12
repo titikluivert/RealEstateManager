@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+<FrameLayout
     android:id="@+id/fragment_container_modif"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -13,40 +24,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/linLyt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="30dp"
-                android:layout_weight="1"
-                android:text="Real Estate details"
-                android:textColor="@color/grey_80"
-                android:textSize="17.3sp" />
-
-
-            <ImageView
-                android:id="@+id/closeForm2Activity"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_close_black_24dp"
-                tools:ignore="VectorDrawableCompat" />
-
-        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/relRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linLyt"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context=".MainActivity"
             tools:showIn="@layout/activity_main">
@@ -208,3 +190,5 @@
 
 
 </FrameLayout>
+
+</LinearLayout>

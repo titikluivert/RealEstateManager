@@ -1,36 +1,62 @@
 package com.openclassrooms.realestatemanager.controler.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.RealEstateAgent;
+import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
+
+    @BindView(R.id.NameOfAgent)
+    TextView NameOfAgent;
+
+    @BindView(R.id.emailOfAgent)
+    TextView emailOfAgent;
+
+    @BindView(R.id.phoneNumberAgent)
+    TextView phoneNumberAgent;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         this.configureToolbar();
+
+        RealEstateAgent agentProfileData =  mainUtils.getRealEstateAgent(this);
+        if (agentProfileData != null) {
+            NameOfAgent.setText(agentProfileData.getName());
+            emailOfAgent.setText(agentProfileData.getEmail());
+            phoneNumberAgent.setText(agentProfileData.getPhoneNumber());
+        }
         //textView = findViewById(R.id.logout);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -45,16 +71,4 @@ public class ProfileActivity extends AppCompatActivity {
         ab.setTitle("My Profile");
         Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }
