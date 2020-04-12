@@ -9,12 +9,14 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.room.TypeConverter;
 
 import com.google.firebase.database.DatabaseReference;
@@ -149,14 +151,22 @@ public class mainUtils {
      * @param context
      * @return
      */
-    /*public static Boolean isInternetAvailable(Context context) {
-        WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+  /*  public static Boolean isInternetAvailable(Context context) {
+        /*WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        Object networkInfo = context.getApplicationContext().getSystemService(Context.NETWORK_STATS_SERVICE);
         return wifi.isWifiEnabled();
     }*/
     public static Boolean isInternetAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        boolean isOnline = false;
+        try {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkCapabilities capabilities = manager.getNetworkCapabilities(manager.getActiveNetwork());  // need ACCESS_NETWORK_STATE permission
+            isOnline = capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isOnline;
     }
 
     public static class Converter {

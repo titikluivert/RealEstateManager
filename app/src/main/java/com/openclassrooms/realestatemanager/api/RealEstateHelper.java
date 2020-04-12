@@ -36,6 +36,7 @@ public class RealEstateHelper {
         final boolean[] toBeUpdate = {true};
 
         Map<String, Object> updates = new HashMap<>();
+        updates.put("id", realEstateModel.getId());
         updates.put("type", realEstateModel.getType());
         updates.put("price", realEstateModel.getPrice());
         updates.put("surface", realEstateModel.getSurface());
@@ -58,7 +59,7 @@ public class RealEstateHelper {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot datas : dataSnapshot.getChildren()) {
                     if (Objects.equals(datas.getKey(), realEstateModel.getAddress())) {
-                        // adresse is the same, Adresse were found data need to change
+                        // address is the same, Address were found data need to change
                         toBeUpdate[0] = false;
                         ref.updateChildren(updates);
                         break;

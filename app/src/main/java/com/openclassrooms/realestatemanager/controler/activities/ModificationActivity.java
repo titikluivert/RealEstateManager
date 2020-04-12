@@ -169,9 +169,13 @@ public class ModificationActivity extends BaseActivity {
 
     private void updateUI(RealEstateModel estateModel) {
 
-        ArrayAdapter myAdap = (ArrayAdapter) realEstateTypeEdit.getAdapter(); //cast to an ArrayAdapter
-
-        int spinnerPosition = myAdap.getPosition(estateModel.getType());
+        int spinnerPosition =0;
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.places, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        realEstateTypeEdit.setAdapter(adapter);
+        if (estateModel.getType() != null) {
+            spinnerPosition = adapter.getPosition(estateModel.getType());
+        }
         realEstateTypeEdit.setSelection(spinnerPosition);
         realEstateSurfaceEdit.setText(String.valueOf(estateModel.getSurface()));
         realEstatePriceEdit.setText(String.valueOf(estateModel.getPrice()));

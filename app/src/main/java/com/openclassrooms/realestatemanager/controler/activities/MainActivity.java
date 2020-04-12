@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.controler.activities;
 import android.app.Notification;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
@@ -131,6 +133,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     updateRealEstate.setStatus(false);
                     updateRealEstate.setDateOfSale(new Date());
                     realEstateViewModel.update(updateRealEstate);
+                    RealEstateHelper.updateRealEstateChildren(updateRealEstate);
                     Toast.makeText(MainActivity.this, "Sale date and Status were updated to sale", Toast.LENGTH_SHORT).show();
                 }
 
@@ -186,6 +189,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //menu.add(0, R.id.menu_main_search, 0, "test");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
