@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.model.RealEstateModel;
 
 
 @Database(entities = {RealEstateModel.class, RealEstateAgent.class}, version = 1, exportSchema = false)
-@TypeConverters({mainUtils.Converter.class , mainUtils.DateConverters.class})
+@TypeConverters({mainUtils.ConverterPhotos.class , mainUtils.DateConverters.class})
 public abstract class SaveMyRealEstateDatabase extends RoomDatabase {
 
     // --- SINGLETON ---

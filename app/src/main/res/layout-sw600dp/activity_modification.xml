@@ -8,37 +8,10 @@
     android:orientation="vertical"
     tools:context=".controler.activities.RealEstateActivity">
 
-    <LinearLayout
+    <include
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:orientation="horizontal"
-        android:padding="28dp">
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_weight="1"
-            android:text="Add New Real Estate"
-            android:textColor="@color/grey_80"
-            android:textSize="17.3sp" />
-
-
-        <ImageView
-            android:id="@+id/closeForm"
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@drawable/ic_close_black_24dp"
-            tools:ignore="VectorDrawableCompat" />
-
-
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
     <!-- <include layout="@layout/toolbar" />-->
 
@@ -76,14 +49,14 @@
 
 
             <RelativeLayout
-                android:id="@+id/lay_img"
+                android:id="@+id/lay_imgEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp">
 
 
                 <ImageView
-                    android:id="@+id/projectImage"
+                    android:id="@+id/projectImageEdit"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentStart="true"
@@ -93,7 +66,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/uploadPhotos"
+                    android:id="@+id/addImageEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -118,7 +91,7 @@
                 android:textColor="@color/grey_60" />
 
             <Spinner
-                android:id="@+id/realEstateType"
+                android:id="@+id/realEstateTypeEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -139,7 +112,7 @@
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/realEstateAddress"
+                android:id="@+id/realEstateAddressEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -160,7 +133,7 @@
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/realEstatePrice"
+                android:id="@+id/realEstatePriceEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -181,7 +154,7 @@
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/realEstateSurface"
+                android:id="@+id/realEstateSurfaceEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -202,7 +175,7 @@
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/realEstateNumOfRooms"
+                android:id="@+id/realEstateNumOfRoomsEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -224,7 +197,7 @@
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/realEstatePOI"
+                android:id="@+id/realEstatePOIEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -244,7 +217,68 @@
                 android:textColor="@color/grey_60" />
 
             <EditText
-                android:id="@+id/realEstateDescription"
+                android:id="@+id/realEstateDescriptionEdit"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:background="@drawable/edit_bg"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="DATE OF ENTRANCE"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <EditText
+                android:id="@+id/realEstate_dateEntranceEdit"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:background="@drawable/edit_bg"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="STATUS"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <EditText
+                android:id="@+id/statusEdit"
+                style="@style/EditText.Flat.Grey"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xmlarge"
+                android:background="@drawable/edit_bg"
+                android:minHeight="@dimen/spacing_xmlarge"
+                android:paddingLeft="@dimen/spacing_middle"
+                android:paddingRight="@dimen/spacing_middle" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:text="DATE OF SALE"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/grey_60" />
+
+            <EditText
+                android:id="@+id/realEstate_dateOfSaleEdit"
                 style="@style/EditText.Flat.Grey"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_xmlarge"
@@ -255,7 +289,7 @@
 
 
             <Button
-                android:id="@+id/btnSend"
+                android:id="@+id/btnSendEdit"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
@@ -263,7 +297,7 @@
                 android:layout_marginTop="@dimen/spacing_large"
                 android:layout_marginRight="-4dp"
                 android:background="@drawable/btn_bg"
-                android:text="SUBMIT"
+                android:text="MODIFY"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textColor="@android:color/white" />

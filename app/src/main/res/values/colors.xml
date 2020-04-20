@@ -22,6 +22,9 @@
     <color name="grey_90">#263238</color>
 
 
+
+    <color name="translucent">#80000000</color>
+
     <!--Material color list from https://material.io/guidelines/style/color.html-->
 
     <color name="blue_grey_600">#546E7A</color>

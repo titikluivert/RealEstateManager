@@ -1,16 +1,12 @@
 package com.openclassrooms.realestatemanager.controler.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateAgent;
 import com.openclassrooms.realestatemanager.utils.mainUtils;

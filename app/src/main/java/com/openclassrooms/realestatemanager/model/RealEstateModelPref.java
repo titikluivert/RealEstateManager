@@ -1,7 +1,8 @@
 package com.openclassrooms.realestatemanager.model;
 
-public class RealEstateModelPref {
+import java.util.List;
 
+public class RealEstateModelPref {
 
     private String type;
     private String price;
@@ -10,9 +11,10 @@ public class RealEstateModelPref {
     private String description;
     private String poi;
     private String address;
+    private List<UploadImage> photos;
 
 
-    public RealEstateModelPref(String type, String price, String surface, String roomNumbers, String description, String poi, String address) {
+    public RealEstateModelPref(String type, String price, String surface, String roomNumbers, String description, String poi, String address, List<UploadImage> photos) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -20,12 +22,13 @@ public class RealEstateModelPref {
         this.description = description;
         this.poi = poi;
         this.address = address;
+        this.photos = photos;
 
 
     }
 
 
-    public RealEstateModelPref(String type, String price, String surface, String numOfRooms, String description, String s, boolean b, String dateOfEntrance, String s1, Object o) {
+    public RealEstateModelPref() {
 
     }
 
@@ -87,5 +90,11 @@ public class RealEstateModelPref {
         this.poi = poi;
     }
 
+    public List<UploadImage> getPhotos() {
+        return photos;
+    }
 
+    public void setPhotos(List<UploadImage> photos) {
+        this.photos = photos;
+    }
 }

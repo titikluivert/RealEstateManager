@@ -1,28 +1,27 @@
 package com.openclassrooms.realestatemanager.controler.activities;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
-import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
+import com.openclassrooms.realestatemanager.model.UploadImage;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
-import com.openclassrooms.realestatemanager.viewmodel.RealEstateViewModel;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -43,11 +42,9 @@ public class ModificationActivity extends BaseActivity {
     private RealEstateModel realEstateModel, realEstateModelUpdated;
 
     private static final int PICK_IMAGES_MODIFICATION = 2;
-    private List<String> photos_modification = new ArrayList<>();
+    private List<UploadImage> photos_modification = new ArrayList<>();
     private static boolean photoIsUploaded = false;
     private Bitmap bitmap;
-
-    private RealEstateModelPref userData;
 
     @BindView(R.id.realEstateTypeEdit)
     Spinner realEstateTypeEdit;
@@ -79,6 +76,7 @@ public class ModificationActivity extends BaseActivity {
     @BindView(R.id.realEstate_dateOfSaleEdit)
     EditText realEstate_dateOfSaleEdit;
 
+    private String photoName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,7 +117,7 @@ public class ModificationActivity extends BaseActivity {
             if (clipData != null) {
 
                 for (int i = 0; i < clipData.getItemCount(); i++) {
-
+                    photoName = "";
                     ClipData.Item item = clipData.getItemAt(i);
                     Uri uri = item.getUri();
                     String[] temp = uri.toString().split("/");
@@ -129,10 +127,9 @@ public class ModificationActivity extends BaseActivity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-
+                   // showAlertDialogButtonClicked("Image " + i + " name");
                     mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
-                    //user.setThumbnail();
-                    photos_modification.add(String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", ""))));
+                    photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
 
                     //uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
                     // uploadPhotos.setTextColor(Color.GREEN);
@@ -141,14 +138,16 @@ public class ModificationActivity extends BaseActivity {
             } else {
 
                 if (selectedImage != null) {
+                    photoName = "";
                     try {
                         bitmap = BitmapFactory.decodeStream(Objects.requireNonNull(getContentResolver().openInputStream(selectedImage)));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+                    //showAlertDialogButtonClicked("Image name");
                     String[] tempSelectedImage = selectedImage.toString().split("/");
                     mainUtils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
-                    photos_modification.add(String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""))));
+                    photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", "")))));
                     // uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
                     //  uploadPhotos.setTextColor(Color.GREEN);
                     photoIsUploaded = true;
@@ -169,7 +168,7 @@ public class ModificationActivity extends BaseActivity {
 
     private void updateUI(RealEstateModel estateModel) {
 
-        int spinnerPosition =0;
+        int spinnerPosition = 0;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.places, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         realEstateTypeEdit.setAdapter(adapter);
@@ -183,7 +182,7 @@ public class ModificationActivity extends BaseActivity {
         realEstateNumOfRoomsEdit.setText(String.valueOf(estateModel.getRoomNumbers()));
         realEstateDescriptionEdit.setText(estateModel.getDescription() == null ? "" : estateModel.getDescription());
         realEstate_dateOfSaleEdit.setText(estateModel.getDateOfSale() == null ? "" : mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfSale())));
-        realEstate_dateEntranceEdit.setText( mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfEntrance())));
+        realEstate_dateEntranceEdit.setText(mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfEntrance())));
         realEstatePOIEdit.setText(estateModel.getPoi() == null ? "" : estateModel.getPoi());
         statusEdit.setText(estateModel.getStatus() ? "Available" : "Sold");
 
@@ -240,4 +239,26 @@ public class ModificationActivity extends BaseActivity {
         ab.setTitle("Modify Real Estate");
         Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
     }
+
+    public void showAlertDialogButtonClicked(String titleAlert) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(titleAlert);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
+        builder.setView(customLayout);
+        // add a button
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // send data from the AlertDialog to the Activity
+                EditText editText = customLayout.findViewById(R.id.editImageName);
+                photoName = editText.getText().toString();
+            }
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

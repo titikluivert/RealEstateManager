@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#CC7C7E7D"
+        android:background="@color/translucent"
         android:layout_marginEnd="2dp"
         android:layout_alignBottom="@+id/item_image"
         android:focusable="false"
@@ -28,12 +28,14 @@
             android:id="@+id/item_text"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:paddingBottom="0dp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:padding="10dp"
             android:text="Bonjour"
-            android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
 

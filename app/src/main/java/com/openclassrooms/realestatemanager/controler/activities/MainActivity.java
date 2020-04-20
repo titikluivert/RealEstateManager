@@ -54,7 +54,7 @@ import static com.openclassrooms.realestatemanager.controler.activities.SearchAc
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String EXTRA_ADD_NEW_ESTATE = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_ADD_NEW_ESTATE";
-    public static final String EXTRA_ADD_PHOTOS = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_ADD_PHOTOS";
+    public static final String ON_BACK_PRESSED_SECOND = "com.openclassrooms.realestatemanager.controler.activities.ON_BACK_PRESSED_SECOND";
     public static final String EXTRA_MESSAGE = "com.openclassrooms.realestatemanager.controler.activities.MESSAGE";
     public static final String EXTRA_MAP = "com.openclassrooms.realestatemanager.controler.activities.MAP_DATA";
     static final int REQUEST_SEARCH_CODE = 1;
@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     RealEstateModel updateRealEstate = adapter.getRealEstateAt(viewHolder.getAdapterPosition());
                     updateRealEstate.setStatus(true);
                     updateRealEstate.setDateOfSale(null);
-                    realEstateViewModel.delete(updateRealEstate);
+                    realEstateViewModel.update(updateRealEstate);
                     Toast.makeText(MainActivity.this, "Sale date and Status were updated to available ", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == ItemTouchHelper.RIGHT) {
@@ -272,7 +272,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (requestCode == REQUEST_ADD_REAL_ESTATE_CODE) {
             if (resultCode == RESULT_OK) {
-                this.updateUI(data.getStringExtra(EXTRA_ADD_PHOTOS), data.getStringExtra(EXTRA_ADD_NEW_ESTATE));
+                this.updateUI(data.getStringExtra(EXTRA_ADD_NEW_ESTATE));
             }
             if (resultCode == RESULT_CANCELED) {
                 showToast("error occurred was not able to add new real estate");
@@ -280,32 +280,48 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
 
         if (requestCode == EDIT_REAL_ESTATE_REQUEST) {
+            String resultString;
+            RealEstateModel estateModelModification;
+            long id;
             if (resultCode == RESULT_OK) {
-                long id = data.getLongExtra(EXTRA_ID_CURRENT_ESTATE, -1);
-                if (id == -1) {
-                    Toast.makeText(this, "Note can't be updated", Toast.LENGTH_SHORT).show();
-                    return;
+                resultString = data.getStringExtra(EXTRA_RESULT_MODIFICATION);
+                if (resultString == null || resultString.isEmpty()) {
+                    resultString = data.getStringExtra(ON_BACK_PRESSED_SECOND);
+                    estateModelModification = restoreRealEstateModel(resultString);
+                } else {
+                    id = data.getLongExtra(EXTRA_ID_CURRENT_ESTATE, -1);
+                    if (id == -1) {
+                        Toast.makeText(this, "Note can't be updated", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    estateModelModification = restoreRealEstateModel(resultString);
+                    estateModelModification.setId(id);
                 }
 
-                String resultString = data.getStringExtra(EXTRA_RESULT_MODIFICATION);
-                RealEstateModel estateModelModification = new Gson().fromJson(resultString, new TypeToken<RealEstateModel>() {
-                }.getType());
-                estateModelModification.setId(id);
+
                 this.updateFromModification(estateModelModification);
             }
             if (resultCode == RESULT_CANCELED) {
-                showToast("error occurred was not able to update current real estate");
+
+                estateModelModification = mainUtils.getRealEstateModel(this);
+                if (estateModelModification == null) {
+                    showToast("error occurred was not able to update current real estate");
+                } else {
+                    this.updateFromModification(estateModelModification);
+                    mainUtils.saveRealEstateModel(this,null);
+                }
+
             }
         }
 
     }
 
-    public void updateUI(String data0, String data) {
-        List<String> photo = mainUtils.Converter.restoreList(data0);
+    public void updateUI(String data) {
+
         RealEstateModelPref data1 = new Gson().fromJson(data, new TypeToken<RealEstateModelPref>() {
         }.getType());
         RealEstateModel note = new RealEstateModel(data1.getType(), Double.parseDouble(data1.getPrice()), Float.parseFloat(data1.getSurface()), Integer.parseInt(data1.getRoomNumbers()), data1.getDescription(), data1.getAddress(),
-                photo, true, new Date(), null, data1.getPoi(), 1);
+                data1.getPhotos(), true, new Date(), null, data1.getPoi(), 1);
         realEstateViewModel.insert(note);
         RealEstateHelper.writeNewRealEstate(note);
         this.notification();

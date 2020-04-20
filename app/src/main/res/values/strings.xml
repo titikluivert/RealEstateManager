@@ -106,7 +106,7 @@
     <string name="save_vicinity_key">pref_key_vicinity</string>
     <string name="save_restaurantName_key">pref_key_restaurantName</string>
     <string name="realEstateAgentProfile">pref_key_realEstateAgentProfile</string>
-    <string name="save_rating_key">pref_key_rating</string>
+    <string name="realEstateModel">pref_key_realEstateModel</string>
     <string name="save_photoHeight_key">pref_key_photoHeight</string>
     <string name="save_photoWidth_key">pref_key_photoWidth</string>
     <string name="save_photoRef_key">pref_key_photoRef</string>

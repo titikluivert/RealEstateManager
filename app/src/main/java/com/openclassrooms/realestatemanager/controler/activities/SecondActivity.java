@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,14 +23,16 @@ import com.openclassrooms.realestatemanager.utils.mainUtils;
 import com.openclassrooms.realestatemanager.view.PhotoViewAdapter;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.openclassrooms.realestatemanager.controler.activities.ModificationActivity.EXTRA_ID_CURRENT_ESTATE;
+import static com.openclassrooms.realestatemanager.controler.activities.MainActivity.ON_BACK_PRESSED_SECOND;
 import static com.openclassrooms.realestatemanager.utils.mainUtils.getLocationFromAddress;
 
 
@@ -62,7 +65,6 @@ public class SecondActivity extends BaseActivity {
     // FOR DESIGN
     private RealEstateModel realEstateModel;
 
-    private boolean deleteItem = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,22 +72,20 @@ public class SecondActivity extends BaseActivity {
         setContentView(R.layout.activity_second);
         ButterKnife.bind(this);
         this.configureToolbar();
-
-        ArrayList<UploadImage> items = new ArrayList<>();
-        PhotoViewAdapter adapter = new PhotoViewAdapter(this, items);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(adapter);
-        // coming from main activity
         realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
-
         if (realEstateModel == null) {
             // //coming from map activity --> this activity was start from map activity
             realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(mainUtils.EXTRA_MAP_TO_SECOND));
         }
-        for (int i = 0; i < realEstateModel.getPhotos().size(); i++) {
-            items.add(new UploadImage("Image " + i, realEstateModel.getPhotos().get(i)));
-            adapter.notifyDataSetChanged();
-        }
+
+        List<UploadImage> items = realEstateModel.getPhotos();
+        PhotoViewAdapter adapter = new PhotoViewAdapter(this, items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
+        // coming from main activity
+
+        adapter.notifyDataSetChanged();
+
         try {
             Glide.with(this).load(getGoogleMapUrl(this, realEstateModel.getAddress())).into(mapImg);
         } catch (IOException e) {
@@ -98,13 +98,12 @@ public class SecondActivity extends BaseActivity {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setMessage("Do you want to delete this image ?");
             builder1.setCancelable(true);
-
             builder1.setPositiveButton(
                     "Yes",
                     (dialog, id) -> {
-                        // adapter.getItemCount();
-                        //    items.remove();
-                        deleteItem = true;
+                        items.remove(photos);
+                        realEstateModel.setPhotos(items);
+                        adapter.notifyDataSetChanged();
                         dialog.cancel();
                     });
             builder1.setNegativeButton(
@@ -116,7 +115,39 @@ public class SecondActivity extends BaseActivity {
 
         });
 
+        adapter.setOnItemClickListener(photos -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            // set the custom layout
+            View customLayout = getLayoutInflater().inflate(R.layout.show_image_layout, null);
+            builder.setView(customLayout);
+
+            ImageView imageView = customLayout.findViewById(R.id.imageView_photoView);
+            TextView textV = customLayout.findViewById(R.id.editImageNameView);
+
+            textV.setText(photos.getName());
+            imageView.setImageBitmap(mainUtils.loadImageBitmap(photos.getImageUrl()));
+
+            builder.setPositiveButton(
+                    "CLOSE",
+                    (dialog, id) -> {
+                        dialog.cancel();
+                    });
+
+            AlertDialog alert11 = builder.create();
+            alert11.show();
+
+        });
+
     }
+
+
+    @Override
+    public void onPause() {
+        mainUtils.saveRealEstateModel(this, realEstateModel);
+        super.onPause();
+    }
+
 
     @OnClick(R.id.ModifyRealEstate_fab)
     public void ModifyRealEstate() {
@@ -144,7 +175,7 @@ public class SecondActivity extends BaseActivity {
     }
 
     private void updateUI(RealEstateModel estateModel) {
-        String [] realEstateAddress = estateModel.getAddress().split(",");
+        String[] realEstateAddress = estateModel.getAddress().split(",");
         String dateOfSaleStr;
         if (estateModel.getDateOfSale() == null) {
             dateOfSaleStr = "";
@@ -156,7 +187,7 @@ public class SecondActivity extends BaseActivity {
         textSurface.setText("Surface : " + estateModel.getSurface() + " sqm");
         textDateSale.setText("Date of sale : " + dateOfSaleStr);
         textDescriptionContent.setText(estateModel.getDescription());
-        address_txt.setText(realEstateAddress[0].trim()+"\n"+realEstateAddress[1].trim());
+        address_txt.setText(realEstateAddress[0].trim() + "\n" + realEstateAddress[1].trim());
 
     }
 
@@ -187,6 +218,7 @@ public class SecondActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            this.onBackPressedFcn();
             onBackPressed();
             return true;
         }
@@ -194,6 +226,11 @@ public class SecondActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void onBackPressedFcn() {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(ON_BACK_PRESSED_SECOND, new Gson().toJson(realEstateModel));
+        setResult(RESULT_OK, resultIntent);
+    }
 
 
 }

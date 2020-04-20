@@ -23,7 +23,7 @@ public class RealEstateModel {
     private int roomNumbers;
     private String description;
     private String address;
-    private List<String> photos;
+    private List<UploadImage> photos;
     private boolean status;
     private Date dateOfEntrance;
     private Date dateOfSale;
@@ -35,7 +35,7 @@ public class RealEstateModel {
     public RealEstateModel() {
     }
 
-    public RealEstateModel(String type, double price, float surface, int roomNumbers, String description, String address, List<String> photos, boolean status, Date dateOfEntrance, Date dateOfSale, String poi, long realEstateAgentId) {
+    public RealEstateModel(String type, double price, float surface, int roomNumbers, String description, String address, List<UploadImage> photos, boolean status, Date dateOfEntrance, Date dateOfSale, String poi, long realEstateAgentId) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -107,11 +107,11 @@ public class RealEstateModel {
         this.id = id;
     }
 
-    public List<String> getPhotos() {
+    public List<UploadImage> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<String> photos) {
+    public void setPhotos(List<UploadImage> photos) {
         this.photos = photos;
     }
 

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import androidx.room.Room;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -26,7 +27,7 @@ import static org.junit.Assert.assertThat;
  * Created by Maxwell on 01/03/2020.
  */
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class RealEstateContentProviderTest {
 
     // FOR DATA
@@ -48,7 +49,7 @@ public class RealEstateContentProviderTest {
     public void getItemsWhenNoItemInserted() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(1));
+        assertThat(cursor.getCount(), is(9));
         cursor.close();
     }
 
@@ -56,7 +57,7 @@ public class RealEstateContentProviderTest {
     public void getAgent() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(0));
+        assertThat(cursor.getCount(), is(9));
         cursor.close();
     }
 
@@ -67,9 +68,9 @@ public class RealEstateContentProviderTest {
         // TEST
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(2));
+        assertThat(cursor.getCount(), is(10));
         assertThat(cursor.moveToFirst(), is(true));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Villa"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Penthouse"));
     }
     // ---
 

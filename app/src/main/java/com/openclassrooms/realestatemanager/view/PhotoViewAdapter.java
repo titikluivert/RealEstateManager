@@ -11,18 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.PhotoViewHolder> {
     private Context context;
-    private ArrayList<UploadImage> items;
+    private List<UploadImage> items;
     private OnItemLongClickListener listener;
+    private OnItemClickListener ClickListener;
 
 
-    public PhotoViewAdapter(Context context, ArrayList<UploadImage> items) {
+    public PhotoViewAdapter(Context context, List<UploadImage> items) {
         this.context = context;
         this.items = items;
     }
@@ -40,7 +43,7 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         holder.itemTitle.setText(items.get(position).getName());
-        holder.itemImage.setImageBitmap(mainUtils.loadImageBitmap(holder.itemView.getContext(),items.get(position).getImageUrl()));
+        holder.itemImage.setImageBitmap(mainUtils.loadImageBitmap(items.get(position).getImageUrl()));
     }
 
     @Override
@@ -65,6 +68,13 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
                 }
                 return false;
             });
+
+            view.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (ClickListener != null && position != RecyclerView.NO_POSITION) {
+                    ClickListener.onItemClick(items.get(position));
+                }
+            });
         }
     }
 
@@ -78,12 +88,13 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
     }
 
 
-    public void removeAt(int position) {
-        items.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, items.size());
+    public interface OnItemClickListener {
+        void onItemClick(UploadImage photos);
     }
 
+    public void setOnItemClickListener(OnItemClickListener ClickListener) {
+        this.ClickListener = ClickListener;
+    }
 }
 
 

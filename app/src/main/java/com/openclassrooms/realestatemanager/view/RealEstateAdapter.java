@@ -26,7 +26,6 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
     private List<RealEstateModel> estateModels = new ArrayList<>();
     private OnItemClickListener listener;
 
-
     @NonNull
     @Override
     public RealEstateHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,8 +41,7 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         String[] temp = currentNote.getAddress().split(",");
         holder.textViewCity.setText(temp[1].trim());
         holder.textViewPrice.setText(String.format("$%s", currentNote.getPrice()));
-        holder.imageView.setImageBitmap(mainUtils.loadImageBitmap(holder.itemView.getContext(),
-                currentNote.getPhotos().get(0)));
+        holder.imageView.setImageBitmap(mainUtils.loadImageBitmap(currentNote.getPhotos().get(0).getImageUrl()));
        // Glide.with(holder.itemView.getContext()).asBitmap().load().into(holder.imageView);
         if (currentNote.getDateOfSale() != null && !currentNote.getDateOfSale().equals("")) {
             holder.avatar_off.setVisibility(View.VISIBLE);

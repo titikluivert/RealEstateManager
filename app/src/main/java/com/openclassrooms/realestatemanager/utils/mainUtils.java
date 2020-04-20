@@ -151,12 +151,13 @@ public class mainUtils {
      * @param context
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
   /*  public static Boolean isInternetAvailable(Context context) {
         /*WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Object networkInfo = context.getApplicationContext().getSystemService(Context.NETWORK_STATS_SERVICE);
         return wifi.isWifiEnabled();
     }*/
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static Boolean isInternetAvailable(Context context) {
         boolean isOnline = false;
         try {
@@ -169,16 +170,16 @@ public class mainUtils {
         return isOnline;
     }
 
-    public static class Converter {
+    public static class ConverterPhotos {
 
         @TypeConverter
-        public static List<String> restoreList(String listOfString) {
-            return new Gson().fromJson(listOfString, new TypeToken<List<String>>() {
+        public static List<UploadImage> restorePhotoList(String listOfString) {
+            return new Gson().fromJson(listOfString, new TypeToken<List<UploadImage>>() {
             }.getType());
         }
 
         @TypeConverter
-        public static String saveList(List<String> listOfString) {
+        public static String savePhotoList(List<UploadImage> listOfString) {
             return new Gson().toJson(listOfString);
         }
     }
@@ -226,7 +227,7 @@ public class mainUtils {
             estateModel.setDescription(values.getAsString("description"));
         if (values.containsKey("status")) estateModel.setStatus(values.getAsBoolean("status"));
         if (values.containsKey("photos"))
-            estateModel.setPhotos(Converter.restoreList(values.getAsString("photos")));
+            estateModel.setPhotos(ConverterPhotos.restorePhotoList(values.getAsString("photos")));
         if (values.containsKey("dateOfEntrance"))
             estateModel.setDateOfEntrance(DateConverters.fromTimestamp(values.getAsString("dateOfEntrance")));
         if (values.containsKey("dateOfSale"))
@@ -277,7 +278,7 @@ public class mainUtils {
         }
     }
 
-    public static Bitmap loadImageBitmap(final Context context, String name) {
+    public static Bitmap loadImageBitmap(String name) {
 
         //final FileInputStream fileInputStream;
         Bitmap bitmap = null;
@@ -297,7 +298,6 @@ public class mainUtils {
         return context.getFileStreamPath(name).exists();
 
     }
-
 
     private static String getFileExtension(Uri uri, Context ctx) {
         ContentResolver cR = Objects.requireNonNull(ctx).getContentResolver();
@@ -346,6 +346,28 @@ public class mainUtils {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String json = sharedPreferences.getString(context.getString(R.string.realEstateAgentProfile), null);
         Type type = new TypeToken<RealEstateAgent>() {
+        }.getType();
+        return gson.fromJson(json, type);
+    }
+
+
+    public static void saveRealEstateModel(Context context, RealEstateModel notifyParam) {
+
+        Gson gson = new Gson();
+        String jsonCategoryList = gson.toJson(notifyParam);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.realEstateModel), jsonCategoryList);
+        editor.apply();
+    }
+
+    public static RealEstateModel getRealEstateModel(Context context) {
+
+        Gson gson = new Gson();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = sharedPreferences.getString(context.getString(R.string.realEstateModel), null);
+        Type type = new TypeToken<RealEstateModel>() {
         }.getType();
         return gson.fromJson(json, type);
     }

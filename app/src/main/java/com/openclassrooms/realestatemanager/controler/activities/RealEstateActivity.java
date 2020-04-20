@@ -10,11 +10,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -24,9 +27,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.api.RealEstateHelper;
 import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
+import com.openclassrooms.realestatemanager.model.UploadImage;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +40,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.openclassrooms.realestatemanager.controler.activities.MainActivity.EXTRA_ADD_NEW_ESTATE;
-import static com.openclassrooms.realestatemanager.controler.activities.MainActivity.EXTRA_ADD_PHOTOS;
 import static com.openclassrooms.realestatemanager.utils.mainUtils.AGENT_ID;
 
 public class RealEstateActivity extends BaseActivity {
-
 
     List<Uri> photoForFirebase = new ArrayList<>();
 
     private static final int STORAGE_PERMISSION_CODE = 100;
     private static final int PICK_IMAGES = 1;
-    List<String> photos = new ArrayList<>();
+    List<UploadImage> photos = new ArrayList<>();
     private static boolean photoIsUploaded = false;
 
     private RealEstateModelPref realEstateData;
@@ -69,18 +71,18 @@ public class RealEstateActivity extends BaseActivity {
     @BindView(R.id.realEstateDescription)
     EditText realEstateDescription;
 
-    /*@BindView(R.id.uploadPhotosfeedbck)
-    TextView uploadPhotos;*/
     Bitmap bitmap;
 
     @BindView(R.id.realEstatePOI)
     EditText realEstatePOI;
 
-
     //Sync with Firebase
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
 
+    private String photoName;
+
+    String[] temp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +110,8 @@ public class RealEstateActivity extends BaseActivity {
                 realEstateNumOfRooms.getText().toString().trim(),
                 realEstateDescription.getText().toString().trim(),
                 realEstatePOI.getText().toString().trim(),
-                realEstateAddress.getText().toString().trim());
+                realEstateAddress.getText().toString().trim(),
+                photos);
 
         if (!photoIsUploaded) {
             showToast("Photos were not updated successfully, please try again");
@@ -118,7 +121,7 @@ public class RealEstateActivity extends BaseActivity {
                 for (int i = 0; i < photoForFirebase.size(); i++) {
                     mainUtils.uploadFile(this, photoForFirebase.get(i), mStorageRef, mDatabaseRef, "AgentID_" + AGENT_ID, realEstateData);
                 }
-               this.openActivity();
+                this.openActivity();
             } else {
                 showToast("Please correctly all the data");
             }
@@ -178,15 +181,14 @@ public class RealEstateActivity extends BaseActivity {
         if (requestCode == PICK_IMAGES && resultCode == RESULT_OK && data != null) {
             ClipData clipData = data.getClipData();
             Uri selectedImage = data.getData();
-
             if (clipData != null) {
 
                 for (int i = 0; i < clipData.getItemCount(); i++) {
-
+                    photoName = "";
                     ClipData.Item item = clipData.getItemAt(i);
                     Uri uri = item.getUri();
                     photoForFirebase.add(uri);
-                    String[] temp = uri.toString().split("/");
+                    temp = uri.toString().split("/");
 
                     try {
                         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
@@ -194,25 +196,26 @@ public class RealEstateActivity extends BaseActivity {
                         e.printStackTrace();
                     }
 
-                    mainUtils.saveImageToInternalStorage(getApplicationContext(), bitmap, temp[temp.length-1].replace("%",""));
-                    photos.add(String.valueOf(getFileStreamPath(temp[temp.length-1].replace("%",""))));
-
-                photoIsUploaded = true;
+                    mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
+                    photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
+                    photoIsUploaded = true;
                 }
             } else {
 
                 if (selectedImage != null) {
+                    photoName = "";
                     photoForFirebase.add(selectedImage);
                     try {
                         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+                    //  showAlertDialogButtonClicked("Image name");
                     String[] tempSelectedImage = selectedImage.toString().split("/");
-                    mainUtils.saveImageToInternalStorage(getApplicationContext(), bitmap, tempSelectedImage[tempSelectedImage.length-1].replace("%",""));
-                    photos.add( String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length-1].replace("%",""))));
-
-                    photoIsUploaded = true;// uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
+                    mainUtils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
+                    photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", "")))));
+                    photoIsUploaded = true;
+                    // uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
                     //  uploadPhotos.setTextColor(Color.GREEN);
                 } else {
 
@@ -230,11 +233,35 @@ public class RealEstateActivity extends BaseActivity {
     }
 
     private void openActivity() {
+
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EXTRA_ADD_NEW_ESTATE, new Gson().toJson(realEstateData));
-        resultIntent.putExtra(EXTRA_ADD_PHOTOS, new Gson().toJson(photos));
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    public void showAlertDialogButtonClicked() {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
+        builder.setView(customLayout);
+
+        ImageView imageView = customLayout.findViewById(R.id.imageView_photo);
+        imageView.setImageBitmap(bitmap);
+
+        // add a button
+        builder.setPositiveButton("Submit", (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            EditText editText = customLayout.findViewById(R.id.editImageName);
+            photoName = editText.getText().toString();
+
+            mainUtils.saveImageToInternalStorage(getApplicationContext(), bitmap, temp[temp.length - 1].replace("%", ""));
+            photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

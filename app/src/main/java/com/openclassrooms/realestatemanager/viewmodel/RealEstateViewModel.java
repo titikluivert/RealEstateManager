@@ -34,12 +34,10 @@ public class RealEstateViewModel extends AndroidViewModel {
         repository = new RealEstateDataRepository(application);
        // realAgent  = new RealAgentDataRepository(application);
         allRealEstates = repository.getAllNotes();
-
     }
 
     public LiveData<List<RealEstateAgent>> getUser() {
         return this.currentUser;  }
-
 
     public void insert(RealEstateModel note) {
         repository.insert(note);
@@ -53,12 +51,9 @@ public class RealEstateViewModel extends AndroidViewModel {
         repository.delete(note);
     }
 
-
-
     public void deleteAllNotes() {
         repository.deleteAllNotes();
     }
-
 
     public LiveData<List<RealEstateModel>> getAllNotes() {
         return allRealEstates;
