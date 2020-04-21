@@ -4,9 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +28,8 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
     private List<RealEstateModel> estateModels = new ArrayList<>();
     private OnItemClickListener listener;
 
+    private int selected_position = -1;
+
     @NonNull
     @Override
     public RealEstateHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,7 +46,7 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         holder.textViewCity.setText(temp[1].trim());
         holder.textViewPrice.setText(String.format("$%s", currentNote.getPrice()));
         holder.imageView.setImageBitmap(mainUtils.loadImageBitmap(currentNote.getPhotos().get(0).getImageUrl()));
-       // Glide.with(holder.itemView.getContext()).asBitmap().load().into(holder.imageView);
+
         if (currentNote.getDateOfSale() != null && !currentNote.getDateOfSale().equals("")) {
             holder.avatar_off.setVisibility(View.VISIBLE);
             holder.avatar_on.setVisibility(View.GONE);
@@ -50,6 +54,11 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
             holder.avatar_off.setVisibility(View.GONE);
             holder.avatar_on.setVisibility(View.VISIBLE);
         }
+
+        int backgroundColor = (position == selected_position) ? R.color.blue_600 : R.color.whiteTextColor;
+        holder.itemRealEstate.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), backgroundColor));
+
+
     }
 
     @Override
@@ -75,6 +84,7 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         private TextView textViewPrice;
         private View avatar_on;
         private View avatar_off;
+        private LinearLayout itemRealEstate;
 
 
         public RealEstateHolder(View itemView) {
@@ -86,10 +96,14 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
             avatar_on = itemView.findViewById(R.id.avatar_on);
             avatar_off = itemView.findViewById(R.id.avatar_off);
 
+            itemRealEstate = itemView.findViewById(R.id.itemRealEstate);
+
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
                     listener.onItemClick(estateModels.get(position));
+                    selected_position = position;
+                    notifyDataSetChanged();
                 }
             });
         }

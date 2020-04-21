@@ -8,9 +8,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +25,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -31,6 +39,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.api.RealEstateHelper;
+import com.openclassrooms.realestatemanager.controler.fragments.DetailsFragment;
+import com.openclassrooms.realestatemanager.controler.fragments.MapsViewFragment;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
@@ -83,6 +93,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     RealEstateAdapter adapter;
     private Menu menu;
 
+
+    // For Tablet mode landscape only
+    private boolean isTabletModeLandScapeOn;
+
+    @Nullable
+    @BindView(R.id.linLytFirstScreen)
+    LinearLayout linLytFirstScreen;
+
+    @Nullable
+    @BindView(R.id.linLytSecondScreen)
+    LinearLayout linLytSecondScreen;
+
+
+    @Nullable
+    @BindView(R.id.fragmentRemove)
+    FrameLayout fragmentRemove;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +139,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         realEstateViewModel = ViewModelProviders.of(this).get(RealEstateViewModel.class);
         realEstateViewModel.getAllNotes().observe(this, adapter::setNotes);
 
+        // For tablet landscape only
+        if (linLytFirstScreen != null) {
+            assert linLytSecondScreen != null;
+            isTabletModeLandScapeOn = linLytFirstScreen.getVisibility() == View.VISIBLE & linLytSecondScreen.getVisibility() == View.VISIBLE;
+           if (adapter.getItemCount() == 0)
+           {  assert fragmentRemove != null;
+              // fragmentRemove.setVisibility(View.GONE);
+           }
+
+        }
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -125,7 +163,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     RealEstateModel updateRealEstate = adapter.getRealEstateAt(viewHolder.getAdapterPosition());
                     updateRealEstate.setStatus(true);
                     updateRealEstate.setDateOfSale(null);
-                    realEstateViewModel.update(updateRealEstate);
+                    realEstateViewModel.delete(updateRealEstate);
                     Toast.makeText(MainActivity.this, "Sale date and Status were updated to available ", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == ItemTouchHelper.RIGHT) {
@@ -141,10 +179,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }).attachToRecyclerView(recyclerView);
 
         adapter.setOnItemClickListener(realEstateModel -> {
-            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-            intent.putExtra(EXTRA_MESSAGE, new Gson().toJson(realEstateModel));
-            startActivityForResult(intent, EDIT_REAL_ESTATE_REQUEST);
 
+            if (isTabletModeLandScapeOn) {
+                assert fragmentRemove != null;
+                //fragmentRemove.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentB, DetailsFragment.newInstance(new Gson().toJson(realEstateModel))).commit();
+                //Fragment fragmentB = getSupportFragmentManager().findFragmentById(R.id.fragmentB);
+               // fragmentB.displayDetails(realEstateModel);
+
+
+            } else {
+
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra(EXTRA_MESSAGE, new Gson().toJson(realEstateModel));
+                startActivityForResult(intent, EDIT_REAL_ESTATE_REQUEST);
+            }
         });
 
         mToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -221,7 +270,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Intent it = new Intent(MainActivity.this, Login.class);
                 it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(it);
-//    sharedPreferences.edit().putBoolean("loginAdmin", false).apply();
+                //    sharedPreferences.edit().putBoolean("loginAdmin", false).apply();
                 break;
 
             default:
@@ -308,7 +357,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     showToast("error occurred was not able to update current real estate");
                 } else {
                     this.updateFromModification(estateModelModification);
-                    mainUtils.saveRealEstateModel(this,null);
+                    mainUtils.saveRealEstateModel(this, null);
                 }
 
             }

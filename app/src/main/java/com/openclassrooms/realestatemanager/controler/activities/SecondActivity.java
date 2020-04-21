@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
