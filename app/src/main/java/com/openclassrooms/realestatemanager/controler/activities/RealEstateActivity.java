@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -75,6 +77,10 @@ public class RealEstateActivity extends BaseActivity {
 
     @BindView(R.id.realEstatePOI)
     EditText realEstatePOI;
+
+    @BindView(R.id.uploadConfirmation)
+    TextView uploadConfirmation;
+
 
     //Sync with Firebase
     private StorageReference mStorageRef;
@@ -198,8 +204,12 @@ public class RealEstateActivity extends BaseActivity {
 
                     mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
                     photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
+
+                    uploadConfirmation.setText(String.format("%d photos successfully uploaded", photos.size()));
+                    uploadConfirmation.setTextColor(Color.GREEN);
                     photoIsUploaded = true;
                 }
+
             } else {
 
                 if (selectedImage != null) {
@@ -210,23 +220,22 @@ public class RealEstateActivity extends BaseActivity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    //  showAlertDialogButtonClicked("Image name");
                     String[] tempSelectedImage = selectedImage.toString().split("/");
                     mainUtils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
                     photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", "")))));
                     photoIsUploaded = true;
-                    // uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
-                    //  uploadPhotos.setTextColor(Color.GREEN);
+                    uploadConfirmation.setText(String.format("%d photos successfully uploaded", photos.size()));
+                    uploadConfirmation.setTextColor(Color.GREEN);
                 } else {
 
-                    // uploadPhotos.setText("Upload was not successful");
-                    // uploadPhotos.setTextColor(Color.RED);
+                    uploadConfirmation.setText(R.string.image_upload_unsuccessful);
+                    uploadConfirmation.setTextColor(Color.RED);
                     photoIsUploaded = false;
                 }
             }
         } else {
-            // uploadPhotos.setText("Upload was not successful");
-            // uploadPhotos.setTextColor(Color.RED);
+            uploadConfirmation.setText(R.string.image_upload_unsuccessful);
+            uploadConfirmation.setTextColor(Color.RED);
             photoIsUploaded = false;
         }
 
@@ -239,29 +248,4 @@ public class RealEstateActivity extends BaseActivity {
         setResult(RESULT_OK, resultIntent);
         finish();
     }
-
-    public void showAlertDialogButtonClicked() {
-        // create an alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
-        builder.setView(customLayout);
-
-        ImageView imageView = customLayout.findViewById(R.id.imageView_photo);
-        imageView.setImageBitmap(bitmap);
-
-        // add a button
-        builder.setPositiveButton("Submit", (dialog, which) -> {
-            // send data from the AlertDialog to the Activity
-            EditText editText = customLayout.findViewById(R.id.editImageName);
-            photoName = editText.getText().toString();
-
-            mainUtils.saveImageToInternalStorage(getApplicationContext(), bitmap, temp[temp.length - 1].replace("%", ""));
-            photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
-        });
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
 }

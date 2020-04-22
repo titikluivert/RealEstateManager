@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -43,7 +45,6 @@ public class ModificationActivity extends BaseActivity {
 
     private static final int PICK_IMAGES_MODIFICATION = 2;
     private List<UploadImage> photos_modification = new ArrayList<>();
-    private static boolean photoIsUploaded = false;
     private Bitmap bitmap;
 
     @BindView(R.id.realEstateTypeEdit)
@@ -76,6 +77,9 @@ public class ModificationActivity extends BaseActivity {
     @BindView(R.id.realEstate_dateOfSaleEdit)
     EditText realEstate_dateOfSaleEdit;
 
+    @BindView(R.id.uploadConfirmationEdit)
+    TextView uploadConfirmationEdit;
+
     private String photoName;
 
     @Override
@@ -84,8 +88,8 @@ public class ModificationActivity extends BaseActivity {
         setContentView(R.layout.activity_modification);
         ButterKnife.bind(this);
         this.configureToolbar();
-        realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(EXTRA_MODIFY_REAL_ESTATE));
         //take over the existent photos
+        realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(EXTRA_MODIFY_REAL_ESTATE));
         photos_modification = realEstateModel.getPhotos();
         this.updateUI(realEstateModel);
     }
@@ -110,6 +114,7 @@ public class ModificationActivity extends BaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        boolean photoIsUploaded = false;
         if (requestCode == PICK_IMAGES_MODIFICATION && resultCode == RESULT_OK && data != null) {
             ClipData clipData = data.getClipData();
             Uri selectedImage = data.getData();
@@ -127,12 +132,12 @@ public class ModificationActivity extends BaseActivity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                   // showAlertDialogButtonClicked("Image " + i + " name");
+
                     mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
                     photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
 
-                    //uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
-                    // uploadPhotos.setTextColor(Color.GREEN);
+                    uploadConfirmationEdit.setText(String.format("%d photos successfully uploaded", photos_modification.size()));
+                    uploadConfirmationEdit.setTextColor(Color.GREEN);
                     photoIsUploaded = true;
                 }
             } else {
@@ -144,23 +149,22 @@ public class ModificationActivity extends BaseActivity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    //showAlertDialogButtonClicked("Image name");
                     String[] tempSelectedImage = selectedImage.toString().split("/");
                     mainUtils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
                     photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", "")))));
-                    // uploadPhotos.setText(String.format("%d photos were successful uploaded", photos.size()));
-                    //  uploadPhotos.setTextColor(Color.GREEN);
+                    uploadConfirmationEdit.setText(String.format("%d photos successfully uploaded", photos_modification.size()));
+                    uploadConfirmationEdit.setTextColor(Color.GREEN);
                     photoIsUploaded = true;
                 } else {
 
-                    // uploadPhotos.setText("Upload was not successful");
-                    // uploadPhotos.setTextColor(Color.RED);
+                    uploadConfirmationEdit.setText(R.string.image_upload_unsuccessful);
+                    uploadConfirmationEdit.setTextColor(Color.RED);
                     photoIsUploaded = false;
                 }
             }
         } else {
-            // uploadPhotos.setText("Upload was not successful");
-            // uploadPhotos.setTextColor(Color.RED);
+             uploadConfirmationEdit.setText(R.string.image_upload_unsuccessful);
+             uploadConfirmationEdit.setTextColor(Color.RED);
             photoIsUploaded = false;
         }
 

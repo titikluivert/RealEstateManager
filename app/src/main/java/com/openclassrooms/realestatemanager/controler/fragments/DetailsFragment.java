@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
 import static com.openclassrooms.realestatemanager.controler.activities.SecondActivity.EXTRA_MODIFY_REAL_ESTATE;
 import static com.openclassrooms.realestatemanager.utils.mainUtils.getLocationFromAddress;
 
@@ -49,6 +52,13 @@ public class DetailsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM = "param";
 
+    public interface OnDataRealEstatePass {
+        void onDataRealEstatePass(Intent data);
+         void onDataRealEstateSecond(RealEstateModel data);
+
+    }
+
+    OnDataRealEstatePass dataPasser;
 
     private View mViewSecond;
 
@@ -73,6 +83,9 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.address_txt)
     TextView address_txt;
 
+    @BindView(R.id.ModifyRealEstate_fab)
+    FloatingActionButton modifyRealEstate_fab;
+
     // FOR DESIGN
     private RealEstateModel realEstateModel;
 
@@ -87,8 +100,6 @@ public class DetailsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,6 +135,7 @@ public class DetailsFragment extends Fragment {
                         (dialog, id) -> {
                             items.remove(photos);
                             realEstateModel.setPhotos(items);
+                            passDataRealEstate(realEstateModel);
                             adapter.notifyDataSetChanged();
                             dialog.cancel();
                         });
@@ -137,21 +149,29 @@ public class DetailsFragment extends Fragment {
             });
 
             adapter.setOnItemClickListener(photos -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setCancelable(true);
                 // set the custom layout
-                View customLayout = getLayoutInflater().inflate(R.layout.show_image_layout, null);
+                View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
                 builder.setView(customLayout);
 
-                ImageView imageView = customLayout.findViewById(R.id.imageView_photoView);
-                TextView textV = customLayout.findViewById(R.id.editImageNameView);
+                ImageView imageView = customLayout.findViewById(R.id.imageView_photo);
+                EditText textEdit = customLayout.findViewById(R.id.editImageName);
+                TextView textV = customLayout.findViewById(R.id.currentImageName);
 
                 textV.setText(photos.getName());
                 imageView.setImageBitmap(mainUtils.loadImageBitmap(photos.getImageUrl()));
 
+
                 builder.setPositiveButton(
                         "CLOSE",
                         (dialog, id) -> {
+
+                            photos.setName(textEdit.getText().toString().isEmpty() ? "No description" : textEdit.getText().toString());
+                            realEstateModel.setPhotos(items);
+                            passDataRealEstate(realEstateModel);
+                            adapter.notifyDataSetChanged();
+
                             dialog.cancel();
                         });
 
@@ -160,19 +180,18 @@ public class DetailsFragment extends Fragment {
 
             });
 
-            //ModifyRealEstate_fab.onClo
+            modifyRealEstate_fab.setOnClickListener(view -> ModifyRealEstate());
+
         }
 
         return mViewSecond;
     }
 
 
-    @OnClick(R.id.ModifyRealEstate_fab)
-    public void ModifyRealEstate() {
+    private void ModifyRealEstate() {
         String estateModelString = new Gson().toJson(this.realEstateModel);
         Intent myIntent = new Intent(getActivity(), ModificationActivity.class);
         myIntent.putExtra(EXTRA_MODIFY_REAL_ESTATE, estateModelString);
-        //iDCurrentEstate = getIntent().getIntExtra(EXTRA_ID, -1);
         this.startActivityForResult(myIntent, REQUEST_MODIFY_REAL_ESTATE_CODE);
 
     }
@@ -209,6 +228,31 @@ public class DetailsFragment extends Fragment {
     private RealEstateModel restoreRealEstateModelTablet(String s) {
         return new Gson().fromJson(s, new TypeToken<RealEstateModel>() {
         }.getType());
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_MODIFY_REAL_ESTATE_CODE ) {
+            if (resultCode == RESULT_OK) {
+                passData(data);
+            }
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        dataPasser = (OnDataRealEstatePass) context;
+    }
+
+
+    public void passData(Intent data) {
+        dataPasser.onDataRealEstatePass(data);
+    }
+
+    public void passDataRealEstate(RealEstateModel data) {
+        dataPasser.onDataRealEstateSecond(data);
     }
 
 }

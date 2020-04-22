@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.controler.activities.MainActivity;
 import com.openclassrooms.realestatemanager.controler.activities.SecondActivity;
 import com.openclassrooms.realestatemanager.model.CurrentLocation;
 import com.openclassrooms.realestatemanager.model.EstateModelLocation;
@@ -65,10 +66,12 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM = "param";
+    private static final String ARG_PARAM_2 = "param2";
 
     //private List<RealEstateModel> AllRealEstates;
     private List<EstateModelLocation> AllRealEstatesAndLocation;
     private List<RealEstateModel> AllRealEstates;
+    private boolean isTabletModeIsActive;
 
     private LocationCallback mLocationCallback = new LocationCallback() {
 
@@ -99,13 +102,15 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.AllRealEstates = restoreAllRealEstateModels(getArguments().getString(ARG_PARAM));
+            this.isTabletModeIsActive = getArguments().getBoolean(ARG_PARAM_2);
         }
     }
 
-    public static MapsViewFragment newInstance(String param1) {
+    public static MapsViewFragment newInstance(String param1, Boolean isTabletModeOn) {
         MapsViewFragment fragment = new MapsViewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM, param1);
+        args.putBoolean(ARG_PARAM_2, isTabletModeOn);
         fragment.setArguments(args);
         return fragment;
     }
@@ -187,9 +192,16 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
                 clickCount = clickCount + 1;
                 marker.setTag(clickCount);
                 indexForRealEstate = marker.getTitle().split(":");
-                Intent myIntent = new Intent(getActivity(), SecondActivity.class);
-                myIntent.putExtra(mainUtils.EXTRA_MAP_TO_SECOND, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
-                startActivity(myIntent);
+
+                if (!this.isTabletModeIsActive) {
+                    Intent myIntent = new Intent(getActivity(), SecondActivity.class);
+                    myIntent.putExtra(mainUtils.EXTRA_MAP_TO_SECOND, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
+                    startActivity(myIntent);
+                } else {
+                    Intent myIntent = new Intent(getActivity(), MainActivity.class);
+                    myIntent.putExtra(mainUtils.EXTRA_MAP_TO_MAIN, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
+                    startActivity(myIntent);
+                }
             }
             return true;
         });
@@ -204,7 +216,7 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
         // Position of Marker on Map
         markerOptions.position(latLng);
         // Adding Title to the Marker
-        markerOptions.title("Type" + " : " + results.get(i).getRealEstateModelList().getType()+ ":" + i);
+        markerOptions.title("Type" + " : " + results.get(i).getRealEstateModelList().getType() + ":" + i);
         markerOptions.snippet(results.get(i).getRealEstateModelList().getAddress());
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
@@ -234,14 +246,14 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
             assert locationResult != null;
             double distance = mainUtils.getDistanceInMeters(this.latitude, this.longitude, locationResult[0], locationResult[1]);
             if (distance <= mainUtils.PROXIMITY_RADIUS) {
-                EstateModelLocation temp = new EstateModelLocation(realEstateModelList.get(i),locationResult[0],locationResult[1]);
+                EstateModelLocation temp = new EstateModelLocation(realEstateModelList.get(i), locationResult[0], locationResult[1]);
                 retValue.add(temp);
             }
         }
         return retValue;
     }
 
-    private void buildRetrofitAndGetResponse(final Location mLocation)  {
+    private void buildRetrofitAndGetResponse(final Location mLocation) {
 
         mMap.clear();
         // This loop will go through all the results and add marker on each location.

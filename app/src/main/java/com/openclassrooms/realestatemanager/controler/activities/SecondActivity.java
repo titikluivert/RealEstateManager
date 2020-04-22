@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -117,18 +118,24 @@ public class SecondActivity extends BaseActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(true);
             // set the custom layout
-            View customLayout = getLayoutInflater().inflate(R.layout.show_image_layout, null);
+            View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
             builder.setView(customLayout);
 
-            ImageView imageView = customLayout.findViewById(R.id.imageView_photoView);
-            TextView textV = customLayout.findViewById(R.id.editImageNameView);
+            ImageView imageView = customLayout.findViewById(R.id.imageView_photo);
+            EditText textEdit = customLayout.findViewById(R.id.editImageName);
+            TextView textV = customLayout.findViewById(R.id.currentImageName);
 
             textV.setText(photos.getName());
             imageView.setImageBitmap(mainUtils.loadImageBitmap(photos.getImageUrl()));
 
+
             builder.setPositiveButton(
                     "CLOSE",
                     (dialog, id) -> {
+
+                        photos.setName(textEdit.getText().toString().isEmpty() ? "No description" : textEdit.getText().toString());
+                        realEstateModel.setPhotos(items);
+                        adapter.notifyDataSetChanged();
                         dialog.cancel();
                     });
 

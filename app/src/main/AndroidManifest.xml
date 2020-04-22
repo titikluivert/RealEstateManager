@@ -50,15 +50,14 @@
 
         <activity android:name=".controler.activities.RealEstateActivity" />
         <activity android:name=".controler.activities.MapActivity" />
-        <activity android:name=".controler.activities.MainActivity" />
-        <activity android:name=".controler.activities.ProfileActivity" />
-        <activity android:name=".controler.activities.Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".controler.activities.MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+        <activity android:name=".controler.activities.ProfileActivity" />
         <activity android:name=".controler.activities.SecondActivity" />
         <activity android:name=".controler.activities.SearchActivity" />
 

@@ -2,18 +2,13 @@ package com.openclassrooms.realestatemanager.controler.activities;
 
 import android.app.Notification;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +20,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -40,7 +34,6 @@ import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.api.RealEstateHelper;
 import com.openclassrooms.realestatemanager.controler.fragments.DetailsFragment;
-import com.openclassrooms.realestatemanager.controler.fragments.MapsViewFragment;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
@@ -61,12 +54,13 @@ import static com.openclassrooms.realestatemanager.controler.activities.Modifica
 import static com.openclassrooms.realestatemanager.controler.activities.SearchActivity.SEARCH_RESULT;
 import static com.openclassrooms.realestatemanager.controler.activities.SearchActivity.regexS;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, DetailsFragment.OnDataRealEstatePass {
 
     public static final String EXTRA_ADD_NEW_ESTATE = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_ADD_NEW_ESTATE";
     public static final String ON_BACK_PRESSED_SECOND = "com.openclassrooms.realestatemanager.controler.activities.ON_BACK_PRESSED_SECOND";
     public static final String EXTRA_MESSAGE = "com.openclassrooms.realestatemanager.controler.activities.MESSAGE";
     public static final String EXTRA_MAP = "com.openclassrooms.realestatemanager.controler.activities.MAP_DATA";
+    public static final String EXTRA_MAP_IS_TABLET_MODE_ON = "com.openclassrooms.realestatemanager.controler.activities.MAP_IS_TABLET_MODE_ON";
     static final int REQUEST_SEARCH_CODE = 1;
     public static final int EDIT_REAL_ESTATE_REQUEST = 2;
     static final int REQUEST_ADD_REAL_ESTATE_CODE = 4;
@@ -95,7 +89,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     // For Tablet mode landscape only
-    private boolean isTabletModeLandScapeOn;
+    private boolean isTabletModeLandScapeOn = false;
 
     @Nullable
     @BindView(R.id.linLytFirstScreen)
@@ -109,7 +103,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Nullable
     @BindView(R.id.fragmentRemove)
     FrameLayout fragmentRemove;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,33 +119,46 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+
+        if (linLytFirstScreen != null) {
+            assert linLytSecondScreen != null;
+            isTabletModeLandScapeOn = linLytFirstScreen.getVisibility() == View.VISIBLE & linLytSecondScreen.getVisibility() == View.VISIBLE;
+
+            assert fragmentRemove != null;
+            fragmentRemove.setVisibility(View.GONE);
+        }
+
+        RealEstateModel realEstateModelMAP = restoreRealEstateModel(getIntent().getStringExtra(mainUtils.EXTRA_MAP_TO_MAIN));
+        if (realEstateModelMAP != null) {
+            assert fragmentRemove != null;
+            fragmentRemove.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentB, DetailsFragment.newInstance(new Gson().toJson(realEstateModelMAP))).commit();
+        }
+
         // adapter
-        this.adapter = new RealEstateAdapter();
+        this.adapter = new RealEstateAdapter(isTabletModeLandScapeOn);
         recyclerView.setAdapter(adapter);
+
+        // For tablet landscape only
+        if (adapter.getItemCount() == 0) {
+            // assert fragmentRemove != null;
+            // fragmentRemove.setVisibility(View.GONE);
+            int a = 2;
+        }
 
         //navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         // view model
         realEstateViewModel = ViewModelProviders.of(this).get(RealEstateViewModel.class);
         realEstateViewModel.getAllNotes().observe(this, adapter::setNotes);
 
-        // For tablet landscape only
-        if (linLytFirstScreen != null) {
-            assert linLytSecondScreen != null;
-            isTabletModeLandScapeOn = linLytFirstScreen.getVisibility() == View.VISIBLE & linLytSecondScreen.getVisibility() == View.VISIBLE;
-           if (adapter.getItemCount() == 0)
-           {  assert fragmentRemove != null;
-              // fragmentRemove.setVisibility(View.GONE);
-           }
-
-        }
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder
+                    viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
@@ -182,14 +188,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             if (isTabletModeLandScapeOn) {
                 assert fragmentRemove != null;
-                //fragmentRemove.setVisibility(View.VISIBLE);
+                fragmentRemove.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentB, DetailsFragment.newInstance(new Gson().toJson(realEstateModel))).commit();
                 //Fragment fragmentB = getSupportFragmentManager().findFragmentById(R.id.fragmentB);
-               // fragmentB.displayDetails(realEstateModel);
-
-
+                // fragmentB.displayDetails(realEstateModel);
             } else {
-
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 intent.putExtra(EXTRA_MESSAGE, new Gson().toJson(realEstateModel));
                 startActivityForResult(intent, EDIT_REAL_ESTATE_REQUEST);
@@ -254,6 +257,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     LiveData<List<RealEstateModel>> AllRealEstates = realEstateViewModel.getAllNotes();
                     Intent intent = new Intent(MainActivity.this, MapActivity.class);
                     intent.putExtra(EXTRA_MAP, new Gson().toJson(AllRealEstates.getValue()));
+                    intent.putExtra(EXTRA_MAP_IS_TABLET_MODE_ON, isTabletModeLandScapeOn);
                     startActivity(intent);
                 } else {
                     showToast("check your internet connection");
@@ -262,14 +266,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.menu_drawer_logout:
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putBoolean("loginUser", false).apply();
-                sharedPreferences.edit().putBoolean("loginAdmin", false).apply();
-
-                Intent it = new Intent(MainActivity.this, Login.class);
-                it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(it);
+                showToast("Not supported");
                 //    sharedPreferences.edit().putBoolean("loginAdmin", false).apply();
                 break;
 
@@ -407,5 +404,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar(toolbar);
     }
 
+    @Override
+    public void onDataRealEstatePass(Intent data) {
+
+        long id = data.getLongExtra(EXTRA_ID_CURRENT_ESTATE, -1);
+        String resultStringTablet = data.getStringExtra(EXTRA_RESULT_MODIFICATION);
+        if (id == -1) {
+            Toast.makeText(this, "Note can't be updated", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        RealEstateModel estateModelModificationTablet = restoreRealEstateModel(resultStringTablet);
+        estateModelModificationTablet.setId(id);
+        this.updateFromModification(estateModelModificationTablet);
+
+    }
+
+    @Override
+    public void onDataRealEstateSecond(RealEstateModel data) {
+        this.updateFromModification(data);
+    }
 }
 

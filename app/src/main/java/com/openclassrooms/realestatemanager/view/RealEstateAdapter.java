@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
@@ -29,6 +28,14 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
     private OnItemClickListener listener;
 
     private int selected_position = -1;
+    private boolean iSModeTabletLandActive;
+
+    public RealEstateAdapter() {
+    }
+
+    public RealEstateAdapter(boolean iSModeTabletLandActive) {
+        this.iSModeTabletLandActive = iSModeTabletLandActive;
+    }
 
     @NonNull
     @Override
@@ -50,14 +57,14 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         if (currentNote.getDateOfSale() != null && !currentNote.getDateOfSale().equals("")) {
             holder.avatar_off.setVisibility(View.VISIBLE);
             holder.avatar_on.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.avatar_off.setVisibility(View.GONE);
             holder.avatar_on.setVisibility(View.VISIBLE);
         }
-
-        int backgroundColor = (position == selected_position) ? R.color.blue_600 : R.color.whiteTextColor;
-        holder.itemRealEstate.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), backgroundColor));
-
+        if (iSModeTabletLandActive) {
+            int backgroundColor = (position == selected_position) ? R.color.blue_600 : R.color.whiteTextColor;
+            holder.itemRealEstate.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), backgroundColor));
+        }
 
     }
 
@@ -76,7 +83,6 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
     }
 
     class RealEstateHolder extends RecyclerView.ViewHolder {
-
 
         private TextView textViewType;
         private ImageView imageView;
@@ -102,8 +108,11 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
                     listener.onItemClick(estateModels.get(position));
-                    selected_position = position;
-                    notifyDataSetChanged();
+
+                    if (iSModeTabletLandActive) {
+                        selected_position = position;
+                        notifyDataSetChanged();
+                    }
                 }
             });
         }
@@ -116,6 +125,17 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void updateAdapter(RealEstateModel note, String title) {
+        setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(RealEstateModel note) {
+
+            }
+        });
+
+        notifyDataSetChanged();
     }
 
 

@@ -63,7 +63,7 @@ public class mainUtils {
     private static final double d2km = 111189.57696D * r2d;
 
     public static final String EXTRA_MAP_TO_SECOND = "MAP_TO_SECOND";
-    public static final String DATA_SECOND2MAIN_ACTIVITY = "EXTRA_MODIFY_REAL_ESTATE";
+    public static final String EXTRA_MAP_TO_MAIN = "MAP_TO_MAIN";
 
     public static final String ApiKeyGoogleID = "AIzaSyAEwrcgezK5dT7YYVWph2Z3K6CJB497Sa4";
 

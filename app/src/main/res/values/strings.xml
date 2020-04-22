@@ -114,6 +114,7 @@
     <string name="save_uid_key">pref_key_uid</string>
     <string name="save_list_restaurantSelected_key">save_list_restaurantSelected_key</string>
     <string name="save_restaurantSelected_key">pref_restaurantSelected_uid</string>
+    <string name="image_upload_unsuccessful">upload was not successful</string>
 
 
 </resources>

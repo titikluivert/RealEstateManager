@@ -16,7 +16,8 @@ public class MapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         this.configureToolbar();
-         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,MapsViewFragment.newInstance(getIntent().getStringExtra(MainActivity.EXTRA_MAP))).commit();
+         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,MapsViewFragment.newInstance(getIntent().getStringExtra(MainActivity.EXTRA_MAP),
+                 getIntent().getBooleanExtra(MainActivity.EXTRA_MAP_IS_TABLET_MODE_ON, false))).commit();
     }
 
     @Override

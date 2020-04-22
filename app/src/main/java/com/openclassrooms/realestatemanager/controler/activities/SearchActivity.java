@@ -129,8 +129,8 @@ public class SearchActivity extends BaseActivity {
                             || Float.parseFloat(bigindateTextprice.getText().toString().trim()) > Float.parseFloat(enddateTextPrice.getText().toString().trim())) {
                         showToast("both price must be entered Or end price should be greater than the start one");
                     } else {
-                        startPrice = bigindateTextSurface.getText().toString();
-                        endPrice = enddateTextSurface.getText().toString();
+                        startPrice = bigindateTextprice.getText().toString();
+                        endPrice = bigindateTextprice.getText().toString();
                         finishResult("BY_PRICE" + regexS + startPrice + regexS + endPrice);
                     }
                     break;
