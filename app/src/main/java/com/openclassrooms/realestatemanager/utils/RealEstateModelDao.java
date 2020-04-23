@@ -46,8 +46,8 @@ public interface RealEstateModelDao {
     @Query("SELECT * FROM Real_Estate WHERE address LIKE '%' || :address  || '%'")
     LiveData<List<RealEstateModel>> SearchByAddress(String address);
 
-   /* @Query("SELECT * FROM Real_Estate WHERE photos > :photo")
-    LiveData<List<RealEstateModel>> SearchByPhotos(List<String> photo);*/
+    @Query("SELECT * FROM Real_Estate WHERE :numPhoto <= numOfPhotoStored")
+    LiveData<List<RealEstateModel>> SearchByPhotos(int numPhoto);
 
     //_____________________________________________________________________________________________
 

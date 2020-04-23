@@ -45,11 +45,11 @@ public class RealEstateDataRepository {
     }
 
     public LiveData<List<RealEstateModel>> SearchBySurface(float minSurface, float maxSurface) {
-        return estateModelDao.SearchBySurface(minSurface,maxSurface);
+        return estateModelDao.SearchBySurface(minSurface, maxSurface);
     }
 
     public LiveData<List<RealEstateModel>> SearchByPrice(int minPrice, int maxPrice) {
-        return estateModelDao.SearchByPrice(minPrice,maxPrice);
+        return estateModelDao.SearchByPrice(minPrice, maxPrice);
     }
 
     public LiveData<List<RealEstateModel>> SearchByOnlineSince(String dateOfEntrance) {
@@ -64,9 +64,9 @@ public class RealEstateDataRepository {
         return estateModelDao.SearchByAddress(address);
     }
 
-   /* public LiveData<List<RealEstateModel>> SearchByPhoto(List<String> photo) {
-        return searchByPhoto;
-    }*/
+    public LiveData<List<RealEstateModel>> SearchByPhoto(int number) {
+        return estateModelDao.SearchByPhotos(number);
+    }
 
 
     private static class InsertNoteAsyncTask extends AsyncTask<RealEstateModel, Void, Void> {

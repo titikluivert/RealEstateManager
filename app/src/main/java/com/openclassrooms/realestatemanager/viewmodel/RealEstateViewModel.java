@@ -79,6 +79,9 @@ public class RealEstateViewModel extends AndroidViewModel {
         return repository.SearchByAddress(address);
     }
 
+    public LiveData<List<RealEstateModel>> SearchByPhotoRepo(int numOfPhotoStored) {
+        return repository.SearchByPhoto(numOfPhotoStored);
+    }
 
 }
 

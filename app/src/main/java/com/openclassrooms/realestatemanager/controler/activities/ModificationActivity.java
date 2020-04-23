@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.controler.activities;
 
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,27 +8,21 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-
 import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
 import com.openclassrooms.realestatemanager.utils.mainUtils;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,7 +35,7 @@ public class ModificationActivity extends BaseActivity {
     public static final String EXTRA_RESULT_MODIFICATION = "com.openclassrooms.realestatemanager.controler.activities.EXTRA_RESULT_MODIFICATION";
 
     private RealEstateModel realEstateModel, realEstateModelUpdated;
-
+    private boolean photoIsUploaded = false;
     private static final int PICK_IMAGES_MODIFICATION = 2;
     private List<UploadImage> photos_modification = new ArrayList<>();
     private Bitmap bitmap;
@@ -94,7 +87,6 @@ public class ModificationActivity extends BaseActivity {
         this.updateUI(realEstateModel);
     }
 
-
     @OnClick(R.id.btnSendEdit)
     void modifiedUI() {
         this.getUpdatedUI();
@@ -114,7 +106,7 @@ public class ModificationActivity extends BaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        boolean photoIsUploaded = false;
+
         if (requestCode == PICK_IMAGES_MODIFICATION && resultCode == RESULT_OK && data != null) {
             ClipData clipData = data.getClipData();
             Uri selectedImage = data.getData();
@@ -135,7 +127,6 @@ public class ModificationActivity extends BaseActivity {
 
                     mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
                     photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
-
                     uploadConfirmationEdit.setText(String.format("%d photos successfully uploaded", photos_modification.size()));
                     uploadConfirmationEdit.setTextColor(Color.GREEN);
                     photoIsUploaded = true;
@@ -202,6 +193,7 @@ public class ModificationActivity extends BaseActivity {
                 realEstateDescriptionEdit.getText().toString(),
                 realEstateAddressEdit.getText().toString(),
                 photos_modification,
+                photos_modification.size(),
                 statusEdit.getText().toString().equals("Available"),
                 mainUtils.DateConverters.fromTimestamp(realEstate_dateEntranceEdit.getText().toString()),
                 mainUtils.DateConverters.fromTimestamp(realEstate_dateOfSaleEdit.getText().toString()),
@@ -242,27 +234,6 @@ public class ModificationActivity extends BaseActivity {
         assert ab != null;
         ab.setTitle("Modify Real Estate");
         Objects.requireNonNull(ab).setDisplayHomeAsUpEnabled(true);
-    }
-
-    public void showAlertDialogButtonClicked(String titleAlert) {
-        // create an alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(titleAlert);
-        // set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
-        builder.setView(customLayout);
-        // add a button
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // send data from the AlertDialog to the Activity
-                EditText editText = customLayout.findViewById(R.id.editImageName);
-                photoName = editText.getText().toString();
-            }
-        });
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
 }

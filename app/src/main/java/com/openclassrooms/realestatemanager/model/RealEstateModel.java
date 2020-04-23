@@ -6,6 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.google.protobuf.Enum;
+
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class RealEstateModel {
     private String description;
     private String address;
     private List<UploadImage> photos;
+    private int numOfPhotoStored;
     private boolean status;
     private Date dateOfEntrance;
     private Date dateOfSale;
@@ -35,7 +38,7 @@ public class RealEstateModel {
     public RealEstateModel() {
     }
 
-    public RealEstateModel(String type, double price, float surface, int roomNumbers, String description, String address, List<UploadImage> photos, boolean status, Date dateOfEntrance, Date dateOfSale, String poi, long realEstateAgentId) {
+    public RealEstateModel(String type, double price, float surface, int roomNumbers, String description, String address, List<UploadImage> photos, int numOfPhotoStored, boolean status, Date dateOfEntrance, Date dateOfSale, String poi, long realEstateAgentId) {
         this.type = type;
         this.price = price;
         this.surface = surface;
@@ -43,6 +46,7 @@ public class RealEstateModel {
         this.description = description;
         this.address = address;
         this.photos = photos;
+        this.numOfPhotoStored = numOfPhotoStored;
         this.status = status;
         this.dateOfEntrance = dateOfEntrance;
         this.dateOfSale = dateOfSale;
@@ -156,5 +160,12 @@ public class RealEstateModel {
         this.realEstateAgentId = realEstateAgentId;
     }
 
+    public int getNumOfPhotoStored() {
+        return numOfPhotoStored;
+    }
+
+    public void setNumOfPhotoStored(int numOfPhotoStored) {
+        this.numOfPhotoStored = numOfPhotoStored;
+    }
 
 }

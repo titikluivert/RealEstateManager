@@ -9,7 +9,7 @@ public class UploadImage {
     }
 
     public UploadImage(String name, String imageUrl) {
-        if (name.trim().equals("")) {
+        if (name == null || name.trim().equals("")) {
             name = "No description";
         }
 

@@ -304,7 +304,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         realEstateViewModel.SearchByAddressRepo(dateTemp[1]).observe(this, this.adapter::setNotes);
                         break;
                     case "BY_PHOTOS":
-                        showToast("nothing is implemented");
+                        realEstateViewModel.SearchByPhotoRepo(Integer.parseInt(dateTemp[1])).observe(this, this.adapter::setNotes);
                         break;
 
                     default:
@@ -367,7 +367,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         RealEstateModelPref data1 = new Gson().fromJson(data, new TypeToken<RealEstateModelPref>() {
         }.getType());
         RealEstateModel note = new RealEstateModel(data1.getType(), Double.parseDouble(data1.getPrice()), Float.parseFloat(data1.getSurface()), Integer.parseInt(data1.getRoomNumbers()), data1.getDescription(), data1.getAddress(),
-                data1.getPhotos(), true, new Date(), null, data1.getPoi(), 1);
+                data1.getPhotos(),data1.getPhotos().size(), true, new Date(), null, data1.getPoi(), 1);
         realEstateViewModel.insert(note);
         RealEstateHelper.writeNewRealEstate(note);
         this.notification();

@@ -62,7 +62,6 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
     private View mView;
     private Marker m;
     private MarkerOptions markerOptions = new MarkerOptions();
-    private List<String> reselected = new ArrayList<>();
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM = "param";
@@ -104,6 +103,7 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
             this.AllRealEstates = restoreAllRealEstateModels(getArguments().getString(ARG_PARAM));
             this.isTabletModeIsActive = getArguments().getBoolean(ARG_PARAM_2);
         }
+        this.retrieveSaveData(savedInstanceState);
     }
 
     public static MapsViewFragment newInstance(String param1, Boolean isTabletModeOn) {
@@ -119,7 +119,22 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_maps, container, false);
+        this.retrieveSaveData(savedInstanceState);
         return mView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("realEstateSave", new Gson().toJson(AllRealEstates));
+        outState.putBoolean("tabletIsActiveSave", isTabletModeIsActive);
+        //outState.putString("mFusedLocation", new Gson().toJson(mFusedLocationClient)); //FusedLocationProviderClient ;
+        outState.putDouble("latitudeSave", latitude);
+        outState.putDouble("longitudeSave", longitude);
+        // outState.putString("mFusedLocationSave", new Gson().toJson(currentLocation));
+        // outState.putString("mapSave", new Gson().toJson(mMap));
+        //  outState.putString("mSave", new Gson().toJson(m));
+        outState.putString("markerOptionsSave", new Gson().toJson(markerOptions));
     }
 
     @Override
@@ -138,8 +153,7 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                Objects.requireNonNull(getContext()), R.raw.style_google));
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(Objects.requireNonNull(getContext()), R.raw.style_google));
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(SET_INTERVAL); // 5 secondes interval
         locationRequest.setFastestInterval(SET_INTERVAL);
@@ -265,5 +279,20 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
             placeRealEstateToMap();
         }
 
+    }
+
+    private void retrieveSaveData(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+           // AllRealEstates = new Gson().fromJson(savedInstanceState.getString("realEstateSave"), new TypeToken<RealEstateModel>() {
+           // }.getType());
+            isTabletModeIsActive = savedInstanceState.getBoolean("tabletIsActiveSave", false);
+            //mFusedLocationClient =  new Gson().fromJson(savedInstanceState.getString("mFusedLocation"), new TypeToken<CurrentLocation>() {}.getType()); //FusedLocationProviderClient ;
+            latitude = savedInstanceState.getDouble("latitudeSave");
+            longitude = savedInstanceState.getDouble("longitudeSave");
+            // currentLocation = new Gson().fromJson(savedInstanceState.getString("mFusedLocationSave"), new TypeToken<CurrentLocation>() {}.getType());
+            //  mMap = new Gson().fromJson(savedInstanceState.getString("mapSave"), new TypeToken<GoogleMap>() {}.getType());
+            //  m = new Gson().fromJson(savedInstanceState.getString("mSave"), new TypeToken<Marker>() {}.getType());
+           // markerOptions.
+        }
     }
 }

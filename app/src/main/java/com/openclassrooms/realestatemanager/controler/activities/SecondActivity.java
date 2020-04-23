@@ -133,7 +133,7 @@ public class SecondActivity extends BaseActivity {
                     "CLOSE",
                     (dialog, id) -> {
 
-                        photos.setName(textEdit.getText().toString().isEmpty() ? "No description" : textEdit.getText().toString());
+                        photos.setName(textEdit.getText().toString().isEmpty() ? textV.getText().toString() : textEdit.getText().toString());
                         realEstateModel.setPhotos(items);
                         adapter.notifyDataSetChanged();
                         dialog.cancel();
@@ -152,7 +152,6 @@ public class SecondActivity extends BaseActivity {
         mainUtils.saveRealEstateModel(this, realEstateModel);
         super.onPause();
     }
-
 
     @OnClick(R.id.ModifyRealEstate_fab)
     public void ModifyRealEstate() {

@@ -167,7 +167,7 @@ public class DetailsFragment extends Fragment {
                         "CLOSE",
                         (dialog, id) -> {
 
-                            photos.setName(textEdit.getText().toString().isEmpty() ? "No description" : textEdit.getText().toString());
+                            photos.setName(textEdit.getText().toString().isEmpty() ? textV.getText().toString() : textEdit.getText().toString());
                             realEstateModel.setPhotos(items);
                             passDataRealEstate(realEstateModel);
                             adapter.notifyDataSetChanged();
