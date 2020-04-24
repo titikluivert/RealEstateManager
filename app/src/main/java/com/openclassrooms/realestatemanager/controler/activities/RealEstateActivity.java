@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
 import com.openclassrooms.realestatemanager.model.UploadImage;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.openclassrooms.realestatemanager.controler.activities.MainActivity.EXTRA_ADD_NEW_ESTATE;
-import static com.openclassrooms.realestatemanager.utils.mainUtils.AGENT_ID;
+import static com.openclassrooms.realestatemanager.utils.Utils.AGENT_ID;
 
 public class RealEstateActivity extends BaseActivity {
 
@@ -122,7 +122,7 @@ public class RealEstateActivity extends BaseActivity {
             if (isDataValid(realEstateData)) {
                 // Sync with Firebase
                 for (int i = 0; i < photoForFirebase.size(); i++) {
-                    mainUtils.uploadFile(this, photoForFirebase.get(i), mStorageRef, mDatabaseRef, "AgentID_" + AGENT_ID, realEstateData);
+                    Utils.uploadFile(this, photoForFirebase.get(i), mStorageRef, mDatabaseRef, "AgentID_" + AGENT_ID, realEstateData);
                 }
                 this.openActivity();
             } else {
@@ -199,7 +199,7 @@ public class RealEstateActivity extends BaseActivity {
                         e.printStackTrace();
                     }
 
-                    mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
+                    Utils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
                     photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
 
                     uploadConfirmation.setText(String.format("%d photos successfully uploaded", photos.size()));
@@ -218,7 +218,7 @@ public class RealEstateActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     String[] tempSelectedImage = selectedImage.toString().split("/");
-                    mainUtils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
+                    Utils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
                     photos.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", "")))));
                     photoIsUploaded = true;
                     uploadConfirmation.setText(String.format("%d photos successfully uploaded", photos.size()));

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         String[] temp = currentNote.getAddress().split(",");
         holder.textViewCity.setText(temp[1].trim());
         holder.textViewPrice.setText(String.format("$%s", currentNote.getPrice()));
-        holder.imageView.setImageBitmap(mainUtils.loadImageBitmap(currentNote.getPhotos().get(0).getImageUrl()));
+        holder.imageView.setImageBitmap(Utils.loadImageBitmap(currentNote.getPhotos().get(0).getImageUrl()));
 
         if (currentNote.getDateOfSale() != null && !currentNote.getDateOfSale().equals("")) {
             holder.avatar_off.setVisibility(View.VISIBLE);
@@ -127,14 +127,9 @@ public class RealEstateAdapter extends RecyclerView.Adapter<RealEstateAdapter.Re
         this.listener = listener;
     }
 
-    public void updateAdapter(RealEstateModel note, String title) {
-        setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(RealEstateModel note) {
+    public void updateAdapter(int position) {
 
-            }
-        });
-
+        selected_position = position;
         notifyDataSetChanged();
     }
 

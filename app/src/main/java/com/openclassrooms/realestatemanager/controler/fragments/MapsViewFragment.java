@@ -40,15 +40,15 @@ import com.openclassrooms.realestatemanager.controler.activities.SecondActivity;
 import com.openclassrooms.realestatemanager.model.CurrentLocation;
 import com.openclassrooms.realestatemanager.model.EstateModelLocation;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.openclassrooms.realestatemanager.utils.mainUtils.SET_INTERVAL;
-import static com.openclassrooms.realestatemanager.utils.mainUtils.getLocationFromAddress;
+import static com.openclassrooms.realestatemanager.utils.Utils.SET_INTERVAL;
+import static com.openclassrooms.realestatemanager.utils.Utils.getLocationFromAddress;
 
 
 public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
@@ -209,11 +209,12 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
 
                 if (!this.isTabletModeIsActive) {
                     Intent myIntent = new Intent(getActivity(), SecondActivity.class);
-                    myIntent.putExtra(mainUtils.EXTRA_MAP_TO_SECOND, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
+                    myIntent.putExtra(Utils.EXTRA_MAP_TO_SECOND, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
                     startActivity(myIntent);
                 } else {
                     Intent myIntent = new Intent(getActivity(), MainActivity.class);
-                    myIntent.putExtra(mainUtils.EXTRA_MAP_TO_MAIN, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
+                    myIntent.putExtra(Utils.EXTRA_MAP_TO_MAIN_CURRENT_POSITION_ADAPTER, Integer.parseInt(indexForRealEstate[2]));
+                    myIntent.putExtra(Utils.EXTRA_MAP_TO_MAIN, new Gson().toJson(AllRealEstatesAndLocation.get(Integer.parseInt(indexForRealEstate[2])).getRealEstateModelList()));
                     startActivity(myIntent);
                 }
             }
@@ -244,7 +245,7 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         }*/
         //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, mainUtils.ZOOM_LEVEL));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, Utils.ZOOM_LEVEL));
     }
 
     private List<RealEstateModel> restoreAllRealEstateModels(String s) {
@@ -258,8 +259,8 @@ public class MapsViewFragment extends Fragment implements OnMapReadyCallback {
         for (int i = 0; i < realEstateModelList.size(); i++) {
             double[] locationResult = getLocationFromAddress(getContext(), realEstateModelList.get(i).getAddress());
             assert locationResult != null;
-            double distance = mainUtils.getDistanceInMeters(this.latitude, this.longitude, locationResult[0], locationResult[1]);
-            if (distance <= mainUtils.PROXIMITY_RADIUS) {
+            double distance = Utils.getDistanceInMeters(this.latitude, this.longitude, locationResult[0], locationResult[1]);
+            if (distance <= Utils.PROXIMITY_RADIUS) {
                 EstateModelLocation temp = new EstateModelLocation(realEstateModelList.get(i), locationResult[0], locationResult[1]);
                 retValue.add(temp);
             }

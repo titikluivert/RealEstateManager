@@ -36,7 +36,7 @@ import com.openclassrooms.realestatemanager.api.RealEstateHelper;
 import com.openclassrooms.realestatemanager.controler.fragments.DetailsFragment;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.RealEstateModelPref;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.RealEstateAdapter;
 import com.openclassrooms.realestatemanager.viewmodel.RealEstateViewModel;
 
@@ -66,6 +66,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     static final int REQUEST_ADD_REAL_ESTATE_CODE = 4;
 
     PlacesClient placesClient;
+
+    private int positionFromMap;
     // FOR DESIGN
     private RealEstateViewModel realEstateViewModel;
 
@@ -111,7 +113,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ButterKnife.bind(this);
         this.configureToolbar();
         // Initialize Places.
-        Places.initialize(getApplicationContext(), mainUtils.ApiKeyGoogleID);
+        Places.initialize(getApplicationContext(), Utils.ApiKeyGoogleID);
         //Create a new Places client instance.
         placesClient = Places.createClient(this);
 
@@ -128,24 +130,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             fragmentRemove.setVisibility(View.GONE);
         }
 
-        RealEstateModel realEstateModelMAP = restoreRealEstateModel(getIntent().getStringExtra(mainUtils.EXTRA_MAP_TO_MAIN));
-        if (realEstateModelMAP != null) {
-            assert fragmentRemove != null;
-            fragmentRemove.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentB, DetailsFragment.newInstance(new Gson().toJson(realEstateModelMAP))).commit();
-        }
+
 
         // adapter
         this.adapter = new RealEstateAdapter(isTabletModeLandScapeOn);
         recyclerView.setAdapter(adapter);
-
-        // For tablet landscape only
-        if (adapter.getItemCount() == 0) {
-            // assert fragmentRemove != null;
-            // fragmentRemove.setVisibility(View.GONE);
-            int a = 2;
+        RealEstateModel realEstateModelMAP = restoreRealEstateModel(getIntent().getStringExtra(Utils.EXTRA_MAP_TO_MAIN));
+        if (realEstateModelMAP != null) {
+            assert fragmentRemove != null;
+            fragmentRemove.setVisibility(View.VISIBLE);
+            positionFromMap = getIntent().getIntExtra(Utils.EXTRA_MAP_TO_MAIN_CURRENT_POSITION_ADAPTER, -1);
+            if(isTabletModeLandScapeOn && positionFromMap >= 0) {
+                adapter.updateAdapter(positionFromMap);
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentB, DetailsFragment.newInstance(new Gson().toJson(realEstateModelMAP))).commit();
         }
 
+        
         //navigation view
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -169,7 +170,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     RealEstateModel updateRealEstate = adapter.getRealEstateAt(viewHolder.getAdapterPosition());
                     updateRealEstate.setStatus(true);
                     updateRealEstate.setDateOfSale(null);
-                    realEstateViewModel.delete(updateRealEstate);
+                    realEstateViewModel.update(updateRealEstate);
                     Toast.makeText(MainActivity.this, "Sale date and Status were updated to available ", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == ItemTouchHelper.RIGHT) {
@@ -253,7 +254,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 break;
             case R.id.menu_drawer_map:
-                if (mainUtils.isInternetAvailable(this)) {
+                if (Utils.isInternetAvailable(this)) {
                     LiveData<List<RealEstateModel>> AllRealEstates = realEstateViewModel.getAllNotes();
                     Intent intent = new Intent(MainActivity.this, MapActivity.class);
                     intent.putExtra(EXTRA_MAP, new Gson().toJson(AllRealEstates.getValue()));
@@ -349,12 +350,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             if (resultCode == RESULT_CANCELED) {
 
-                estateModelModification = mainUtils.getRealEstateModel(this);
+                estateModelModification = Utils.getRealEstateModel(this);
                 if (estateModelModification == null) {
                     showToast("error occurred was not able to update current real estate");
                 } else {
                     this.updateFromModification(estateModelModification);
-                    mainUtils.saveRealEstateModel(this, null);
+                    Utils.saveRealEstateModel(this, null);
                 }
 
             }

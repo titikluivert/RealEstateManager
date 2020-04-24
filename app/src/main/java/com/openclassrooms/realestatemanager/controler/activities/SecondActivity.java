@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.PhotoViewAdapter;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.openclassrooms.realestatemanager.controler.activities.MainActivity.ON_BACK_PRESSED_SECOND;
-import static com.openclassrooms.realestatemanager.utils.mainUtils.getLocationFromAddress;
+import static com.openclassrooms.realestatemanager.utils.Utils.getLocationFromAddress;
 
 
 public class SecondActivity extends BaseActivity {
@@ -74,7 +74,7 @@ public class SecondActivity extends BaseActivity {
         realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
         if (realEstateModel == null) {
             // //coming from map activity --> this activity was start from map activity
-            realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(mainUtils.EXTRA_MAP_TO_SECOND));
+            realEstateModel = restoreRealEstateModel(getIntent().getStringExtra(Utils.EXTRA_MAP_TO_SECOND));
         }
 
         List<UploadImage> items = realEstateModel.getPhotos();
@@ -126,7 +126,7 @@ public class SecondActivity extends BaseActivity {
             TextView textV = customLayout.findViewById(R.id.currentImageName);
 
             textV.setText(photos.getName());
-            imageView.setImageBitmap(mainUtils.loadImageBitmap(photos.getImageUrl()));
+            imageView.setImageBitmap(Utils.loadImageBitmap(photos.getImageUrl()));
 
 
             builder.setPositiveButton(
@@ -149,7 +149,7 @@ public class SecondActivity extends BaseActivity {
 
     @Override
     public void onPause() {
-        mainUtils.saveRealEstateModel(this, realEstateModel);
+        Utils.saveRealEstateModel(this, realEstateModel);
         super.onPause();
     }
 
@@ -184,7 +184,7 @@ public class SecondActivity extends BaseActivity {
         if (estateModel.getDateOfSale() == null) {
             dateOfSaleStr = "";
         } else {
-            dateOfSaleStr = mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfSale()));
+            dateOfSaleStr = Utils.getConvertDate(Utils.DateConverters.dateToTimestamp(estateModel.getDateOfSale()));
         }
 
         textRoom.setText("Number of rooms : " + estateModel.getRoomNumbers());

@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.openclassrooms.realestatemanager.utils.mainUtils.AGENT_ID;
-import static com.openclassrooms.realestatemanager.utils.mainUtils.REAL_ESTATE;
+import static com.openclassrooms.realestatemanager.utils.Utils.AGENT_ID;
+import static com.openclassrooms.realestatemanager.utils.Utils.REAL_ESTATE;
 
 public class RealEstateHelper {
 

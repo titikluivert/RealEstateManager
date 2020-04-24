@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +125,7 @@ public class ModificationActivity extends BaseActivity {
                         e.printStackTrace();
                     }
 
-                    mainUtils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
+                    Utils.saveImageToInternalStorage(this, bitmap, temp[temp.length - 1].replace("%", ""));
                     photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(temp[temp.length - 1].replace("%", "")))));
                     uploadConfirmationEdit.setText(String.format("%d photos successfully uploaded", photos_modification.size()));
                     uploadConfirmationEdit.setTextColor(Color.GREEN);
@@ -141,7 +141,7 @@ public class ModificationActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     String[] tempSelectedImage = selectedImage.toString().split("/");
-                    mainUtils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
+                    Utils.saveImageToInternalStorage(this, bitmap, tempSelectedImage[tempSelectedImage.length - 1].replace("%", ""));
                     photos_modification.add(new UploadImage(photoName, String.valueOf(getFileStreamPath(tempSelectedImage[tempSelectedImage.length - 1].replace("%", "")))));
                     uploadConfirmationEdit.setText(String.format("%d photos successfully uploaded", photos_modification.size()));
                     uploadConfirmationEdit.setTextColor(Color.GREEN);
@@ -176,8 +176,8 @@ public class ModificationActivity extends BaseActivity {
         realEstateAddressEdit.setText(estateModel.getAddress() == null ? "" : estateModel.getAddress());
         realEstateNumOfRoomsEdit.setText(String.valueOf(estateModel.getRoomNumbers()));
         realEstateDescriptionEdit.setText(estateModel.getDescription() == null ? "" : estateModel.getDescription());
-        realEstate_dateOfSaleEdit.setText(estateModel.getDateOfSale() == null ? "" : mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfSale())));
-        realEstate_dateEntranceEdit.setText(mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfEntrance())));
+        realEstate_dateOfSaleEdit.setText(estateModel.getDateOfSale() == null ? "" : Utils.getConvertDate(Utils.DateConverters.dateToTimestamp(estateModel.getDateOfSale())));
+        realEstate_dateEntranceEdit.setText(Utils.getConvertDate(Utils.DateConverters.dateToTimestamp(estateModel.getDateOfEntrance())));
         realEstatePOIEdit.setText(estateModel.getPoi() == null ? "" : estateModel.getPoi());
         statusEdit.setText(estateModel.getStatus() ? "Available" : "Sold");
 
@@ -195,8 +195,8 @@ public class ModificationActivity extends BaseActivity {
                 photos_modification,
                 photos_modification.size(),
                 statusEdit.getText().toString().equals("Available"),
-                mainUtils.DateConverters.fromTimestamp(realEstate_dateEntranceEdit.getText().toString()),
-                mainUtils.DateConverters.fromTimestamp(realEstate_dateOfSaleEdit.getText().toString()),
+                Utils.DateConverters.fromTimestamp(realEstate_dateEntranceEdit.getText().toString()),
+                Utils.DateConverters.fromTimestamp(realEstate_dateOfSaleEdit.getText().toString()),
                 realEstatePOIEdit.getText().toString(),
                 1
         );

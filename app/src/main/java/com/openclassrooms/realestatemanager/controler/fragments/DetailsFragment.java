@@ -22,13 +22,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.api.RealEstateHelper;
-import com.openclassrooms.realestatemanager.controler.activities.MainActivity;
 import com.openclassrooms.realestatemanager.controler.activities.ModificationActivity;
-import com.openclassrooms.realestatemanager.controler.activities.SecondActivity;
 import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.PhotoViewAdapter;
 
 import java.io.IOException;
@@ -37,11 +34,9 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static com.openclassrooms.realestatemanager.controler.activities.SecondActivity.EXTRA_MODIFY_REAL_ESTATE;
-import static com.openclassrooms.realestatemanager.utils.mainUtils.getLocationFromAddress;
+import static com.openclassrooms.realestatemanager.utils.Utils.getLocationFromAddress;
 
 
 public class DetailsFragment extends Fragment {
@@ -149,7 +144,7 @@ public class DetailsFragment extends Fragment {
             });
 
             adapter.setOnItemClickListener(photos -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
                 builder.setCancelable(true);
                 // set the custom layout
                 View customLayout = getLayoutInflater().inflate(R.layout.image_name_layout, null);
@@ -160,7 +155,7 @@ public class DetailsFragment extends Fragment {
                 TextView textV = customLayout.findViewById(R.id.currentImageName);
 
                 textV.setText(photos.getName());
-                imageView.setImageBitmap(mainUtils.loadImageBitmap(photos.getImageUrl()));
+                imageView.setImageBitmap(Utils.loadImageBitmap(photos.getImageUrl()));
 
 
                 builder.setPositiveButton(
@@ -202,7 +197,7 @@ public class DetailsFragment extends Fragment {
         if (estateModel.getDateOfSale() == null) {
             dateOfSaleStr = "";
         } else {
-            dateOfSaleStr = mainUtils.getConvertDate(mainUtils.DateConverters.dateToTimestamp(estateModel.getDateOfSale()));
+            dateOfSaleStr = Utils.getConvertDate(Utils.DateConverters.dateToTimestamp(estateModel.getDateOfSale()));
         }
 
         textRoom.setText("Number of rooms : " + estateModel.getRoomNumbers());

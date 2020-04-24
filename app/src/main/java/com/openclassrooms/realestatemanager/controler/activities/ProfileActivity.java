@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.RealEstateAgent;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         this.configureToolbar();
 
-        RealEstateAgent agentProfileData =  mainUtils.getRealEstateAgent(this);
+        RealEstateAgent agentProfileData =  Utils.getRealEstateAgent(this);
         if (agentProfileData != null) {
             NameOfAgent.setText(agentProfileData.getName());
             emailOfAgent.setText(agentProfileData.getEmail());

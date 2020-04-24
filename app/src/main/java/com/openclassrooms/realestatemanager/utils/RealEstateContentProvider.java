@@ -47,7 +47,7 @@ public class RealEstateContentProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
 
         if (getContext() != null) {
-            final long id = SaveMyRealEstateDatabase.getInstance(getContext()).realEstateModelDao().insertRealEstateModels(mainUtils.fromContentValues(contentValues));
+            final long id = SaveMyRealEstateDatabase.getInstance(getContext()).realEstateModelDao().insertRealEstateModels(Utils.fromContentValues(contentValues));
             if (id != 0) {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return ContentUris.withAppendedId(uri, id);
@@ -70,7 +70,7 @@ public class RealEstateContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         if (getContext() != null) {
-            final int count = SaveMyRealEstateDatabase.getInstance(getContext()).realEstateModelDao().updateRealEstateModel(mainUtils.fromContentValues(contentValues));
+            final int count = SaveMyRealEstateDatabase.getInstance(getContext()).realEstateModelDao().updateRealEstateModel(Utils.fromContentValues(contentValues));
             getContext().getContentResolver().notifyChange(uri, null);
             return count;
         }

@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controler.activities.ModificationActivity"></activity>
+
+        <activity android:name=".controler.activities.ModificationActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -49,7 +50,9 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".controler.activities.RealEstateActivity" />
-        <activity android:name=".controler.activities.MapActivity" />
+        <activity android:name=".controler.activities.MapActivity"
+                 android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
         <activity android:name=".controler.activities.MainActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

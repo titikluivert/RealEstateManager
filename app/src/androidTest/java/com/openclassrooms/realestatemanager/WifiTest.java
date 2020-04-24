@@ -1,8 +1,7 @@
 package com.openclassrooms.realestatemanager;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import androidx.test.runner.AndroidJUnit4;
 
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static androidx.test.InstrumentationRegistry.getContext;
@@ -13,7 +12,7 @@ public class WifiTest {
 
     @Test
     public void wifiIsOn() {
-        boolean isPresent = mainUtils.isInternetAvailable(getContext());
+        boolean isPresent = Utils.isInternetAvailable(getContext());
         assertTrue(isPresent);
     }
 }

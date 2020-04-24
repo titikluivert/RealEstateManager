@@ -11,11 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.model.RealEstateModel;
 import com.openclassrooms.realestatemanager.model.UploadImage;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.PhotoViewHolder> {
@@ -43,7 +41,7 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         holder.itemTitle.setText(items.get(position).getName());
-        holder.itemImage.setImageBitmap(mainUtils.loadImageBitmap(items.get(position).getImageUrl()));
+        holder.itemImage.setImageBitmap(Utils.loadImageBitmap(items.get(position).getImageUrl()));
     }
 
     @Override

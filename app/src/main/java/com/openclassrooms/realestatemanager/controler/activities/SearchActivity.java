@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.openclassrooms.realestatemanager.R;
-import com.openclassrooms.realestatemanager.utils.mainUtils;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.Calendar;
 
@@ -136,23 +136,23 @@ public class SearchActivity extends BaseActivity {
                     break;
                 case "BY_AVAILABILITY":
                     String onlineSince;
-                    int dateToday = Integer.parseInt(mainUtils.getTodayDate().replace("/", "").trim());
+                    int dateToday = Integer.parseInt(Utils.getTodayDate().replace("/", "").trim());
                     if (enddateTextOnlineSince.getText().toString().trim().equals("") || enddateTextOnlineSince.getText() == null
-                            || dateToday < Integer.parseInt(mainUtils.getConvertDate(enddateTextOnlineSince.getText().toString().trim()).replace("/", ""))) {
+                            || dateToday < Integer.parseInt(Utils.getConvertDate(enddateTextOnlineSince.getText().toString().trim()).replace("/", ""))) {
                         showToast("date must be entered Or date should not be in the future");
                     } else {
-                        onlineSince = "BY_AVAILABILITY" + regexS + mainUtils.getConvertDate(mainUtils.getConvertDate(enddateTextOnlineSince.getText().toString()));
+                        onlineSince = "BY_AVAILABILITY" + regexS + Utils.getConvertDate(Utils.getConvertDate(enddateTextOnlineSince.getText().toString()));
                         finishResult(onlineSince);
                     }
                     break;
                 case "BY_SALE":
                     String saleSince;
-                    dateToday = Integer.parseInt(mainUtils.getTodayDate().replace("/", "").trim());
+                    dateToday = Integer.parseInt(Utils.getTodayDate().replace("/", "").trim());
                     if (enddateTextSaleSince.getText().toString().trim().equals("") || enddateTextSaleSince.getText() == null
-                            || dateToday < Integer.parseInt(mainUtils.getConvertDate(enddateTextSaleSince.getText().toString().trim()).replace("/", ""))) {
+                            || dateToday < Integer.parseInt(Utils.getConvertDate(enddateTextSaleSince.getText().toString().trim()).replace("/", ""))) {
                         showToast("date must be entered Or date should not be in the future");
                     } else {
-                        saleSince = "BY_SALE" + regexS + mainUtils.getConvertDate(mainUtils.getConvertDate(enddateTextSaleSince.getText().toString()));
+                        saleSince = "BY_SALE" + regexS + Utils.getConvertDate(Utils.getConvertDate(enddateTextSaleSince.getText().toString()));
                         finishResult(saleSince);
                     }
                     break;

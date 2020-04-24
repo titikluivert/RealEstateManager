@@ -46,7 +46,7 @@ import java.util.Objects;
  * Created by Philippe on 21/02/2018.
  */
 
-public class mainUtils {
+public class Utils {
 
     public static final int AGENT_ID = 1;
 
@@ -64,6 +64,7 @@ public class mainUtils {
 
     public static final String EXTRA_MAP_TO_SECOND = "MAP_TO_SECOND";
     public static final String EXTRA_MAP_TO_MAIN = "MAP_TO_MAIN";
+    public static final String EXTRA_MAP_TO_MAIN_CURRENT_POSITION_ADAPTER= "MAP_TO_MAIN_CURRENT_POSITION_ADAPTER";
 
     public static final String ApiKeyGoogleID = "AIzaSyAEwrcgezK5dT7YYVWph2Z3K6CJB497Sa4";
 
