@@ -3,19 +3,18 @@ package com.openclassrooms.realestatemanager.controler.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,13 +48,12 @@ public class DetailsFragment extends Fragment {
 
     public interface OnDataRealEstatePass {
         void onDataRealEstatePass(Intent data);
-         void onDataRealEstateSecond(RealEstateModel data);
+
+        void onDataRealEstateSecond(RealEstateModel data);
 
     }
 
     OnDataRealEstatePass dataPasser;
-
-    private View mViewSecond;
 
     @BindView(R.id.textroom)
     TextView textRoom;
@@ -100,11 +98,12 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mViewSecond = inflater.inflate(R.layout.fragment_details, container, false);
-        ButterKnife.bind(this,mViewSecond);
+        View mViewSecond = inflater.inflate(R.layout.fragment_details, container, false);
+        ButterKnife.bind(this, mViewSecond);
         if (getArguments() != null) {
             this.realEstateModel = restoreRealEstateModelTablet(getArguments().getString(ARG_PARAM));
 
+            assert realEstateModel != null;
             List<UploadImage> items = realEstateModel.getPhotos();
             PhotoViewAdapter adapter = new PhotoViewAdapter(getContext(), items);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -228,7 +227,7 @@ public class DetailsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_MODIFY_REAL_ESTATE_CODE ) {
+        if (requestCode == REQUEST_MODIFY_REAL_ESTATE_CODE) {
             if (resultCode == RESULT_OK) {
                 passData(data);
             }

@@ -153,18 +153,13 @@ public class Utils {
      * @return
      */
 
-  /*  public static Boolean isInternetAvailable(Context context) {
-        /*WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        Object networkInfo = context.getApplicationContext().getSystemService(Context.NETWORK_STATS_SERVICE);
-        return wifi.isWifiEnabled();
-    }*/
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static Boolean isInternetAvailable(Context context) {
         boolean isOnline = false;
         try {
             ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkCapabilities capabilities = manager.getNetworkCapabilities(manager.getActiveNetwork());  // need ACCESS_NETWORK_STATE permission
-            isOnline = capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+            isOnline = capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -295,11 +290,6 @@ public class Utils {
         return bitmap;
     }
 
-    public static boolean fileExist(final Context context, String name) {
-        return context.getFileStreamPath(name).exists();
-
-    }
-
     private static String getFileExtension(Uri uri, Context ctx) {
         ContentResolver cR = Objects.requireNonNull(ctx).getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -330,17 +320,6 @@ public class Utils {
         }
     }
 
-    public static void saveRealEstateAgent(Context context, RealEstateAgent notifyParam) {
-
-        Gson gson = new Gson();
-        String jsonCategoryList = gson.toJson(notifyParam);
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.realEstateAgentProfile), jsonCategoryList);
-        editor.apply();
-    }
-
     public static RealEstateAgent getRealEstateAgent(Context context) {
 
         Gson gson = new Gson();
@@ -350,7 +329,6 @@ public class Utils {
         }.getType();
         return gson.fromJson(json, type);
     }
-
 
     public static void saveRealEstateModel(Context context, RealEstateModel notifyParam) {
 

@@ -130,7 +130,7 @@ public class SearchActivity extends BaseActivity {
                         showToast("both price must be entered Or end price should be greater than the start one");
                     } else {
                         startPrice = bigindateTextprice.getText().toString();
-                        endPrice = bigindateTextprice.getText().toString();
+                        endPrice = enddateTextPrice.getText().toString();
                         finishResult("BY_PRICE" + regexS + startPrice + regexS + endPrice);
                     }
                     break;

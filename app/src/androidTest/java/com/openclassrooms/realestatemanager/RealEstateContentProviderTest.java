@@ -9,9 +9,6 @@ import android.net.Uri;
 import androidx.room.Room;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
-
-
 import com.openclassrooms.realestatemanager.utils.RealEstateContentProvider;
 import com.openclassrooms.realestatemanager.utils.SaveMyRealEstateDatabase;
 
@@ -46,10 +43,22 @@ public class RealEstateContentProviderTest {
     }
 
     @Test
+    public void deleteInsertedItemBeforeTest() {
+        // BEFORE : Adding demo item
+        final int userUri = mContentResolver.delete(RealEstateContentProvider.URI_ITEM, null, null);
+        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
+        assertThat(cursor, notNullValue());
+        assertThat(cursor.getCount(), is(0));
+        assertThat(cursor.moveToFirst(), is(false));
+    }
+
+
+
+    @Test
     public void getItemsWhenNoItemInserted() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(9));
+        assertThat(cursor.getCount(), is(0));
         cursor.close();
     }
 
@@ -57,7 +66,7 @@ public class RealEstateContentProviderTest {
     public void getAgent() {
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(9));
+        assertThat(cursor.getCount(), is(1));
         cursor.close();
     }
 
@@ -68,11 +77,21 @@ public class RealEstateContentProviderTest {
         // TEST
         final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
         assertThat(cursor, notNullValue());
-        assertThat(cursor.getCount(), is(10));
+        assertThat(cursor.getCount(), is(1));
         assertThat(cursor.moveToFirst(), is(true));
-        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Penthouse"));
+        assertThat(cursor.getString(cursor.getColumnIndexOrThrow("type")), is("Villa"));
     }
-    // ---
+
+    @Test
+    public void deleteInsertedItem() {
+        // BEFORE : Adding demo item
+        final int userUri = mContentResolver.delete(RealEstateContentProvider.URI_ITEM, null, null);
+        final Cursor cursor = mContentResolver.query(ContentUris.withAppendedId(RealEstateContentProvider.URI_ITEM, USER_ID), null, null, null, null);
+        assertThat(cursor, notNullValue());
+        assertThat(cursor.getCount(), is(0));
+        assertThat(cursor.moveToFirst(), is(false));
+    }
+
 
     private ContentValues generateItem(){
         final ContentValues values = new ContentValues();
@@ -82,9 +101,10 @@ public class RealEstateContentProviderTest {
         values.put("surface","500");
         values.put("roomNumbers","4");
         values.put("description","Very nice");
-        values.put("status","For Sale");
         values.put("photos", "");
-        values.put("dateOfEntrance","01/01/190");
+        values.put("numOfPhotoStored", "0");
+        values.put("status","For Sale");
+        values.put("dateOfEntrance","01/01/1990");
         values.put("dateOfSale","");
         values.put("poi","school, restaurant");
         values.put("realEstateAgentId", 1);

@@ -67,7 +67,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     PlacesClient placesClient;
 
-    private int positionFromMap;
     // FOR DESIGN
     private RealEstateViewModel realEstateViewModel;
 
@@ -130,8 +129,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             fragmentRemove.setVisibility(View.GONE);
         }
 
-
-
         // adapter
         this.adapter = new RealEstateAdapter(isTabletModeLandScapeOn);
         recyclerView.setAdapter(adapter);
@@ -139,7 +136,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (realEstateModelMAP != null) {
             assert fragmentRemove != null;
             fragmentRemove.setVisibility(View.VISIBLE);
-            positionFromMap = getIntent().getIntExtra(Utils.EXTRA_MAP_TO_MAIN_CURRENT_POSITION_ADAPTER, -1);
+            int positionFromMap = getIntent().getIntExtra(Utils.EXTRA_MAP_TO_MAIN_CURRENT_POSITION_ADAPTER, -1);
             if(isTabletModeLandScapeOn && positionFromMap >= 0) {
                 adapter.updateAdapter(positionFromMap);
             }
@@ -191,8 +188,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 assert fragmentRemove != null;
                 fragmentRemove.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentB, DetailsFragment.newInstance(new Gson().toJson(realEstateModel))).commit();
-                //Fragment fragmentB = getSupportFragmentManager().findFragmentById(R.id.fragmentB);
-                // fragmentB.displayDetails(realEstateModel);
             } else {
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 intent.putExtra(EXTRA_MESSAGE, new Gson().toJson(realEstateModel));

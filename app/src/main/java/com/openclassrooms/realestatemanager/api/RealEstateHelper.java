@@ -30,7 +30,6 @@ public class RealEstateHelper {
     }
 
     // --- UPDATE ---
-
     public static void updateRealEstateChildren(RealEstateModel realEstateModel) {
 
         final boolean[] toBeUpdate = {true};
@@ -44,6 +43,7 @@ public class RealEstateHelper {
         updates.put("description", realEstateModel.getDescription());
         updates.put("address", realEstateModel.getAddress());
         updates.put("photos", realEstateModel.getPhotos());
+        updates.put("numOfPhotoStored", realEstateModel.getNumOfPhotoStored());
         updates.put("status", realEstateModel.getStatus());
         updates.put("dateOfEntrance", realEstateModel.getDateOfEntrance());
         updates.put("dateOfSale", realEstateModel.getDateOfSale());
@@ -78,20 +78,4 @@ public class RealEstateHelper {
 
     }
 
-    public static FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    public static Boolean isCurrentUserLogged() {
-        return (getCurrentUser() != null);
-    }
-
-    public static OnFailureListener onFailureListener() {
-        return new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //showToast(getString(R.string.error_unknown_error));
-            }
-        };
-    }
 }

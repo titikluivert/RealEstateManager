@@ -41,9 +41,7 @@ public class ProfileActivity extends BaseActivity {
             emailOfAgent.setText(agentProfileData.getEmail());
             phoneNumberAgent.setText(agentProfileData.getPhoneNumber());
         }
-        //textView = findViewById(R.id.logout);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -54,7 +52,6 @@ public class ProfileActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
     private void configureToolbar() {
         // Get the toolbar view inside the activity layout

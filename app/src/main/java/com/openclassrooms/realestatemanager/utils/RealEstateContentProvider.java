@@ -60,9 +60,9 @@ public class RealEstateContentProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         if (getContext() != null) {
-            final int count = SaveMyRealEstateDatabase.getInstance(getContext()).realEstateModelDao().deleteRealEstateModelItem(ContentUris.parseId(uri));
+            SaveMyRealEstateDatabase.getInstance(getContext()).realEstateModelDao().deleteAllNotes();
             getContext().getContentResolver().notifyChange(uri, null);
-            return count;
+           return 0;
         }
         throw new IllegalArgumentException("Failed to delete row into " + uri);
     }

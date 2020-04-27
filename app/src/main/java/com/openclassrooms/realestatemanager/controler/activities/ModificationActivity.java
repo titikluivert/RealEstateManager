@@ -73,8 +73,6 @@ public class ModificationActivity extends BaseActivity {
     @BindView(R.id.uploadConfirmationEdit)
     TextView uploadConfirmationEdit;
 
-    private String photoName;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +109,7 @@ public class ModificationActivity extends BaseActivity {
             ClipData clipData = data.getClipData();
             Uri selectedImage = data.getData();
 
+            String photoName;
             if (clipData != null) {
 
                 for (int i = 0; i < clipData.getItemCount(); i++) {
